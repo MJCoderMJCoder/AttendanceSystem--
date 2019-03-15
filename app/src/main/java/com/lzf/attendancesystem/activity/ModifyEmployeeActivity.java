@@ -31,6 +31,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lzf.attendancesystem.R;
 import com.lzf.attendancesystem.ZffApplication;
 import com.lzf.attendancesystem.bean.Staff;
+import com.lzf.attendancesystem.bean.StaffDao;
 import com.lzf.attendancesystem.util.ArcFaceUtil;
 import com.lzf.attendancesystem.util.FileUtil;
 
@@ -41,7 +42,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewEmployeeActivity extends AppCompatActivity {
+public class ModifyEmployeeActivity extends AppCompatActivity {
     private long staffId;
     private String staffName;
     private String staffGender = "女";
@@ -50,6 +51,7 @@ public class NewEmployeeActivity extends AppCompatActivity {
     private File staffFaceTwo;
     private File staffFaceThree;
     private int whichImg = -6003;
+    private StaffDao staffDao = ZffApplication.getDaoSession(this).getStaffDao();
 
     private final int IMAGE_REQUEST_CODE = 6003;  //获取相册图片
     private final int CAMERA_REQUEST_CODE = 6004; //拍照
@@ -58,27 +60,20 @@ public class NewEmployeeActivity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private EditText staffDepartmentEdit;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_employee);
-        if (faceEngineIsInit()) {
-            Cursor cursor = null;
-            try {
-                cursor = ZffApplication.getDaoSession(this).getDatabase().rawQuery("select max(STAFF_ID) MAX_STAFF_ID from STAFF", null);
-                while (cursor.moveToNext()) {
-                    staffId = cursor.getLong(cursor.getColumnIndex("MAX_STAFF_ID")) + 1;
-                    TextView staffIdTxt = findViewById(R.id.staffIdTxt);
-                    staffIdTxt.setText(staffId + "");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
+        setContentView(R.layout.activity_modify_employee);
+        Intent intent = getIntent();
+        if (faceEngineIsInit() && intent != null) {
+            Staff staff = (Staff) intent.getSerializableExtra("staff");
+            staffId = staff.getStaffId();
+            TextView staffIdTxt = findViewById(R.id.staffIdTxt);
+            staffIdTxt.setText(staffId + "");
+            staffName = staff.getStaffName();
             staffNameEdit = findViewById(R.id.staffNameEdit);
+            staffNameEdit.setText(staffName);
             radioGroup = findViewById(R.id.radioGroup);
             radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
@@ -86,16 +81,59 @@ public class NewEmployeeActivity extends AppCompatActivity {
                     staffGender = ((RadioButton) findViewById(checkedId)).getText().toString().trim();
                 }
             });
+            staffGender = staff.getStaffGender().trim();
+            if ("男".equals(staffGender)) {
+                findViewById(R.id.man).performClick();
+            } else if ("女".equals(staffGender)) {
+                findViewById(R.id.woman).performClick();
+            }
+            staffDepartment = staff.getStaffDepartment();
             staffDepartmentEdit = findViewById(R.id.staffDepartmentEdit);
+            staffDepartmentEdit.setText(staffDepartment);
+            staffFaceOne = new File(staff.getStaffFaceOne());
+            Glide.with(this).load(staffFaceOne)
+                    .skipMemoryCache(false) //开启内存缓存
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)//图片缓存策略,这个一般必须有
+                    .error(R.drawable.ic_add_a_photo_black_24dp)// 加载图片失败的时候显示的默认图
+                    .into(((ImageView) findViewById(R.id.oneImg)));
+            staffFaceTwo = new File(staff.getStaffFaceTwo());
+            Glide.with(this).load(staffFaceTwo)
+                    .skipMemoryCache(false) //开启内存缓存
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)//图片缓存策略,这个一般必须有
+                    .error(R.drawable.ic_add_a_photo_black_24dp)// 加载图片失败的时候显示的默认图
+                    .into(((ImageView) findViewById(R.id.twoImg)));
+            staffFaceThree = new File(staff.getStaffFaceThree());
+            Glide.with(this).load(staffFaceThree)
+                    .skipMemoryCache(false) //开启内存缓存
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)//图片缓存策略,这个一般必须有
+                    .error(R.drawable.ic_add_a_photo_black_24dp)// 加载图片失败的时候显示的默认图
+                    .into(((ImageView) findViewById(R.id.threeImg)));
         } else {
             Toast.makeText(this, "抱歉，摄像头不可用", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
 
+
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.submit:
+            case R.id.delete:
+                if (staffFaceOne.delete()) {
+                    if (staffFaceTwo.delete()) {
+                        if (staffFaceThree.delete()) {
+                            staffDao.deleteByKey(staffId);
+                            finish();
+                        } else {
+                            Toast.makeText(this, "删除失败", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "删除失败", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(this, "删除失败", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.modify:
                 try {
                     staffName = staffNameEdit.getText().toString();
                     if ("".equals(staffName)) {
@@ -109,17 +147,14 @@ public class NewEmployeeActivity extends AppCompatActivity {
                                 Toast.makeText(this, "请上传三张包含清晰脸部的图片", Toast.LENGTH_SHORT).show();
                             } else {
                                 Staff staff = new Staff(staffId, staffName, staffGender, staffDepartment, staffFaceOne.getAbsolutePath(), staffFaceTwo.getAbsolutePath(), staffFaceThree.getAbsolutePath());
-                                if (ZffApplication.getDaoSession(this).getStaffDao().insert(staff) > 0) {
-                                    finish();
-                                } else {
-                                    Toast.makeText(this, "新增员工失败", Toast.LENGTH_SHORT).show();
-                                }
+                                staffDao.update(staff);
+                                finish();
                             }
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(this, "新增员工失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "修改信息失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.oneImg:
@@ -147,13 +182,13 @@ public class NewEmployeeActivity extends AppCompatActivity {
     private File getCurrentFile() {
         switch (whichImg) {
             case R.id.oneImg:
-                staffFaceOne = FileUtil.getNewFile(NewEmployeeActivity.this, "image", staffId + "_staffFaceOne.jpg");
+                staffFaceOne = FileUtil.getNewFile(this, "image", staffId + "_staffFaceOne.jpg");
                 return staffFaceOne;
             case R.id.twoImg:
-                staffFaceTwo = FileUtil.getNewFile(NewEmployeeActivity.this, "image", staffId + "_staffFaceTwo.jpg");
+                staffFaceTwo = FileUtil.getNewFile(this, "image", staffId + "_staffFaceTwo.jpg");
                 return staffFaceTwo;
             case R.id.threeImg:
-                staffFaceThree = FileUtil.getNewFile(NewEmployeeActivity.this, "image", staffId + "_staffFaceThree.jpg");
+                staffFaceThree = FileUtil.getNewFile(this, "image", staffId + "_staffFaceThree.jpg");
                 return staffFaceThree;
             default:
                 return null;
@@ -201,7 +236,7 @@ public class NewEmployeeActivity extends AppCompatActivity {
                                 if ((pickIntent.resolveActivity(getPackageManager()) != null)) {
                                     startActivityForResult(pickIntent, IMAGE_REQUEST_CODE);
                                 } else {
-                                    Toast.makeText(NewEmployeeActivity.this, "本地暂无图片", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ModifyEmployeeActivity.this, "本地暂无图片", Toast.LENGTH_SHORT).show();
                                 }
                                 break;
                             case 1:

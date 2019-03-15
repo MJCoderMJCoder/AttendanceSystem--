@@ -6,6 +6,8 @@ import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.Transient;
+
+import java.io.Serializable;
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
@@ -42,7 +44,7 @@ import org.greenrobot.greendao.annotation.Generated;
         //Note that multiple schemas are currently not supported when using the Gradle plugin.（https://github.com/greenrobot/greenDAO/issues/356）
         // For the time being, continue to use your generator project.（http://greenrobot.org/greendao/documentation/generator/）
 )
-public class Staff {
+public class Staff implements Serializable {
     /**
      * 这个@Id注释选择long / Long属性作为实体ID。 在数据库方面，它是主键。 参数autoincrement是一个标志，使ID值不断增加（不重用旧值）。
      * 目前，实体必须用 long或 Long属性作为其主键。这是Android和SQLite的推荐做法。要解决这个问题，可以将key属性定义为一个附加属性，但是要为它创建一个惟一的索引
@@ -108,91 +110,63 @@ public class Staff {
      */
     @Transient
     private String staffRemark; // not persisted
+    @Transient
+    private static final long serialVersionUID = 769026186178017624L; // not persisted
+@Generated(hash = 1669133954)
+public Staff(long staffId, @NotNull String staffName, @NotNull String staffGender, @NotNull String staffDepartment, @NotNull String staffFaceOne,
+        @NotNull String staffFaceTwo, @NotNull String staffFaceThree) {
+    this.staffId = staffId;
+    this.staffName = staffName;
+    this.staffGender = staffGender;
+    this.staffDepartment = staffDepartment;
+    this.staffFaceOne = staffFaceOne;
+    this.staffFaceTwo = staffFaceTwo;
+    this.staffFaceThree = staffFaceThree;
+}
+@Generated(hash = 1774984890)
+public Staff() {
+}
+public long getStaffId() {
+    return this.staffId;
+}
+public void setStaffId(long staffId) {
+    this.staffId = staffId;
+}
+public String getStaffName() {
+    return this.staffName;
+}
+public void setStaffName(String staffName) {
+    this.staffName = staffName;
+}
+public String getStaffGender() {
+    return this.staffGender;
+}
+public void setStaffGender(String staffGender) {
+    this.staffGender = staffGender;
+}
+public String getStaffDepartment() {
+    return this.staffDepartment;
+}
+public void setStaffDepartment(String staffDepartment) {
+    this.staffDepartment = staffDepartment;
+}
+public String getStaffFaceOne() {
+    return this.staffFaceOne;
+}
+public void setStaffFaceOne(String staffFaceOne) {
+    this.staffFaceOne = staffFaceOne;
+}
+public String getStaffFaceTwo() {
+    return this.staffFaceTwo;
+}
+public void setStaffFaceTwo(String staffFaceTwo) {
+    this.staffFaceTwo = staffFaceTwo;
+}
+public String getStaffFaceThree() {
+    return this.staffFaceThree;
+}
+public void setStaffFaceThree(String staffFaceThree) {
+    this.staffFaceThree = staffFaceThree;
+}
 
-    @Generated(hash = 1669133954)
-    public Staff(long staffId, @NotNull String staffName, @NotNull String staffGender, @NotNull String staffDepartment, @NotNull String staffFaceOne,
-                 @NotNull String staffFaceTwo, @NotNull String staffFaceThree) {
-        this.staffId = staffId;
-        this.staffName = staffName;
-        this.staffGender = staffGender;
-        this.staffDepartment = staffDepartment;
-        this.staffFaceOne = staffFaceOne;
-        this.staffFaceTwo = staffFaceTwo;
-        this.staffFaceThree = staffFaceThree;
-    }
-
-    @Generated(hash = 1774984890)
-    public Staff() {
-    }
-
-    public long getStaffId() {
-        return this.staffId;
-    }
-
-    public void setStaffId(long staffId) {
-        this.staffId = staffId;
-    }
-
-    public String getStaffName() {
-        return this.staffName;
-    }
-
-    public void setStaffName(String staffName) {
-        this.staffName = staffName;
-    }
-
-    public String getStaffGender() {
-        return this.staffGender;
-    }
-
-    public void setStaffGender(String staffGender) {
-        this.staffGender = staffGender;
-    }
-
-    public String getStaffDepartment() {
-        return this.staffDepartment;
-    }
-
-    public void setStaffDepartment(String staffDepartment) {
-        this.staffDepartment = staffDepartment;
-    }
-
-    public String getStaffFaceOne() {
-        return this.staffFaceOne;
-    }
-
-    public void setStaffFaceOne(String staffFaceOne) {
-        this.staffFaceOne = staffFaceOne;
-    }
-
-    public String getStaffFaceTwo() {
-        return this.staffFaceTwo;
-    }
-
-    public void setStaffFaceTwo(String staffFaceTwo) {
-        this.staffFaceTwo = staffFaceTwo;
-    }
-
-    public String getStaffFaceThree() {
-        return this.staffFaceThree;
-    }
-
-    public void setStaffFaceThree(String staffFaceThree) {
-        this.staffFaceThree = staffFaceThree;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Staff{" +
-                "staffId=" + staffId +
-                ", staffName='" + staffName + '\'' +
-                ", staffGender='" + staffGender + '\'' +
-                ", staffDepartment='" + staffDepartment + '\'' +
-                ", staffFaceOne='" + staffFaceOne + '\'' +
-                ", staffFaceTwo='" + staffFaceTwo + '\'' +
-                ", staffFaceThree='" + staffFaceThree + '\'' +
-                ", staffRemark='" + staffRemark + '\'' +
-                '}';
-    }
 }

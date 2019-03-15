@@ -11,11 +11,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL"/>
     <uses-permission android:name="android.permission.MANAGE_DOCUMENTS"/>
-    <!--获取设备唯一标识，用于SDK激活授权-->
+    <!-- 获取设备唯一标识，用于SDK激活授权 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <!--允许应用联网，用于SDK联网激活授权-->
+    <!-- 允许应用联网，用于SDK联网激活授权 -->
     <uses-permission android:name="android.permission.INTERNET"/>
-    <!--声明应用需要有摄像头-->
+    <!-- 声明应用需要有摄像头 -->
     <uses-feature android:name="android.hardware.camera"/>
 
     <application
@@ -66,5 +66,8 @@
             android:name=".activity.NativeViewActivity"
             android:launchMode="singleTop">
         </activity>
+        <activity android:name=".activity.ModifyEmployeeActivity">
+        </activity>
     </application>
+
 </manifest>

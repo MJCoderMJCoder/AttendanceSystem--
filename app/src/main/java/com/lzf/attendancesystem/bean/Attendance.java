@@ -7,6 +7,8 @@ import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.Transient;
+
+import java.io.Serializable;
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
@@ -43,7 +45,8 @@ import org.greenrobot.greendao.annotation.Generated;
         //Note that multiple schemas are currently not supported when using the Gradle plugin.（https://github.com/greenrobot/greenDAO/issues/356）
         // For the time being, continue to use your generator project.（http://greenrobot.org/greendao/documentation/generator/）
 )
-public class Attendance {
+public class Attendance implements Serializable {
+
     /**
      * 这个@Id注释选择long / Long属性作为实体ID。 在数据库方面，它是主键。 参数autoincrement是一个标志，使ID值不断增加（不重用旧值）。
      * 目前，实体必须用 long或 Long属性作为其主键。这是Android和SQLite的推荐做法。要解决这个问题，可以将key属性定义为一个附加属性，但是要为它创建一个惟一的索引
@@ -93,69 +96,47 @@ public class Attendance {
      */
     @Transient
     private String attendanceRemark; // not persisted
-
-    @Generated(hash = 270108597)
-    public Attendance(long attendanceId, int staffId, @NotNull String staffName, @NotNull String signInTime, @NotNull String signOutTime) {
-        this.attendanceId = attendanceId;
-        this.staffId = staffId;
-        this.staffName = staffName;
-        this.signInTime = signInTime;
-        this.signOutTime = signOutTime;
-    }
-
-    @Generated(hash = 812698609)
-    public Attendance() {
-    }
-
-    public long getAttendanceId() {
-        return this.attendanceId;
-    }
-
-    public void setAttendanceId(long attendanceId) {
-        this.attendanceId = attendanceId;
-    }
-
-    public int getStaffId() {
-        return this.staffId;
-    }
-
-    public void setStaffId(int staffId) {
-        this.staffId = staffId;
-    }
-
-    public String getStaffName() {
-        return this.staffName;
-    }
-
-    public void setStaffName(String staffName) {
-        this.staffName = staffName;
-    }
-
-    public String getSignInTime() {
-        return this.signInTime;
-    }
-
-    public void setSignInTime(String signInTime) {
-        this.signInTime = signInTime;
-    }
-
-    public String getSignOutTime() {
-        return this.signOutTime;
-    }
-
-    public void setSignOutTime(String signOutTime) {
-        this.signOutTime = signOutTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Attendance{" +
-                "attendanceId=" + attendanceId +
-                ", staffId=" + staffId +
-                ", staffName='" + staffName + '\'' +
-                ", signInTime='" + signInTime + '\'' +
-                ", signOutTime='" + signOutTime + '\'' +
-                ", attendanceRemark='" + attendanceRemark + '\'' +
-                '}';
-    }
+    @Transient
+    private static final long serialVersionUID = -1134974556013000026L; // not persisted
+@Generated(hash = 270108597)
+public Attendance(long attendanceId, int staffId, @NotNull String staffName, @NotNull String signInTime, @NotNull String signOutTime) {
+    this.attendanceId = attendanceId;
+    this.staffId = staffId;
+    this.staffName = staffName;
+    this.signInTime = signInTime;
+    this.signOutTime = signOutTime;
+}
+@Generated(hash = 812698609)
+public Attendance() {
+}
+public long getAttendanceId() {
+    return this.attendanceId;
+}
+public void setAttendanceId(long attendanceId) {
+    this.attendanceId = attendanceId;
+}
+public int getStaffId() {
+    return this.staffId;
+}
+public void setStaffId(int staffId) {
+    this.staffId = staffId;
+}
+public String getStaffName() {
+    return this.staffName;
+}
+public void setStaffName(String staffName) {
+    this.staffName = staffName;
+}
+public String getSignInTime() {
+    return this.signInTime;
+}
+public void setSignInTime(String signInTime) {
+    this.signInTime = signInTime;
+}
+public String getSignOutTime() {
+    return this.signOutTime;
+}
+public void setSignOutTime(String signOutTime) {
+    this.signOutTime = signOutTime;
+}
 }
