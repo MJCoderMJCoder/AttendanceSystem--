@@ -36,6 +36,43 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@id/currentTime"/>
 
+    <TextView
+        android:id="@+id/age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/currentTime"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="120dp"
+        android:text=""
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/gender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/age"
+        android:layout_marginRight="100dp"
+        android:layout_marginTop="100dp"
+        android:text=""
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/liveness"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gender"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="50dp"
+        android:text=""
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
     <ImageView
         android:id="@+id/signInSuccess"
         android:layout_width="match_parent"
@@ -43,6 +80,6 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@id/currentTime"
         android:alpha="0.8"
-        android:src="@drawable/sign_in_success"
+        android:src="@drawable/success"
         android:visibility="gone"/>
 </RelativeLayout>

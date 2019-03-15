@@ -9,3 +9,16 @@ t3979
 功能可以稍微晚点再完善
 我要贴到论文里面去
 界面做的稍微漂亮点
+
+
+用虹软的离线sdk： https://ai.arcsoft.com.cn/index.html
+产品概述
+    ArcFace 离线SDK，包含人脸检测、性别检测、年龄检测、人脸识别、活体检测等能力，初次使用时需联网激活，激活后即可本地无网络环境下工作，
+    可根据业务需求结合人脸识别等SDK灵活地进行应用层开发。
+运行环境
+    Android armeabi-v7a
+系统要求
+    支持Android 5.0 (API Level 21)及以上系统
+权限申明
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />

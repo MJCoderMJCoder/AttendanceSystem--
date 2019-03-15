@@ -43,6 +43,6 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@id/currentTime"
         android:alpha="0.8"
-        android:src="@drawable/sign_in_success"
+        android:src="@drawable/success"
         android:visibility="visible"/>
 </RelativeLayout>
