@@ -1,6 +1,7 @@
 package com.lzf.attendancesystem.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.NotNull;
@@ -8,7 +9,6 @@ import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.Transient;
 
 import java.io.Serializable;
-import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * 使用注释来定义模式和员工实体类
@@ -93,18 +93,24 @@ public class Staff implements Serializable {
      */
     @NotNull
     private String staffFaceOne;
+    @NotNull
+    private byte[] staffFaceOneFeatureData;
     /**
      * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
      * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
      */
     @NotNull
     private String staffFaceTwo;
+    @NotNull
+    private byte[] staffFaceTwoFeatureData;
     /**
      * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
      * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
      */
     @NotNull
     private String staffFaceThree;
+    @NotNull
+    private byte[] staffFaceThreeFeatureData;
     /**
      * 这个@Transient注释标记要从持久性中排除的属性。 将它们用于临时状态等。或者，您也可以使用Java中的transient关键字。
      */
@@ -112,16 +118,20 @@ public class Staff implements Serializable {
     private String staffRemark; // not persisted
     @Transient
     private static final long serialVersionUID = 769026186178017624L; // not persisted
-@Generated(hash = 1669133954)
+@Generated(hash = 2117539648)
 public Staff(long staffId, @NotNull String staffName, @NotNull String staffGender, @NotNull String staffDepartment, @NotNull String staffFaceOne,
-        @NotNull String staffFaceTwo, @NotNull String staffFaceThree) {
+        @NotNull byte[] staffFaceOneFeatureData, @NotNull String staffFaceTwo, @NotNull byte[] staffFaceTwoFeatureData,
+        @NotNull String staffFaceThree, @NotNull byte[] staffFaceThreeFeatureData) {
     this.staffId = staffId;
     this.staffName = staffName;
     this.staffGender = staffGender;
     this.staffDepartment = staffDepartment;
     this.staffFaceOne = staffFaceOne;
+    this.staffFaceOneFeatureData = staffFaceOneFeatureData;
     this.staffFaceTwo = staffFaceTwo;
+    this.staffFaceTwoFeatureData = staffFaceTwoFeatureData;
     this.staffFaceThree = staffFaceThree;
+    this.staffFaceThreeFeatureData = staffFaceThreeFeatureData;
 }
 @Generated(hash = 1774984890)
 public Staff() {
@@ -156,11 +166,23 @@ public String getStaffFaceOne() {
 public void setStaffFaceOne(String staffFaceOne) {
     this.staffFaceOne = staffFaceOne;
 }
+public byte[] getStaffFaceOneFeatureData() {
+    return this.staffFaceOneFeatureData;
+}
+public void setStaffFaceOneFeatureData(byte[] staffFaceOneFeatureData) {
+    this.staffFaceOneFeatureData = staffFaceOneFeatureData;
+}
 public String getStaffFaceTwo() {
     return this.staffFaceTwo;
 }
 public void setStaffFaceTwo(String staffFaceTwo) {
     this.staffFaceTwo = staffFaceTwo;
+}
+public byte[] getStaffFaceTwoFeatureData() {
+    return this.staffFaceTwoFeatureData;
+}
+public void setStaffFaceTwoFeatureData(byte[] staffFaceTwoFeatureData) {
+    this.staffFaceTwoFeatureData = staffFaceTwoFeatureData;
 }
 public String getStaffFaceThree() {
     return this.staffFaceThree;
@@ -168,5 +190,12 @@ public String getStaffFaceThree() {
 public void setStaffFaceThree(String staffFaceThree) {
     this.staffFaceThree = staffFaceThree;
 }
+public byte[] getStaffFaceThreeFeatureData() {
+    return this.staffFaceThreeFeatureData;
+}
+public void setStaffFaceThreeFeatureData(byte[] staffFaceThreeFeatureData) {
+    this.staffFaceThreeFeatureData = staffFaceThreeFeatureData;
+}
+
 
 }

@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.arcsoft.face.ErrorInfo;
 import com.arcsoft.face.FaceEngine;
+import com.arcsoft.face.FaceFeature;
 import com.arcsoft.face.FaceInfo;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -48,8 +49,11 @@ public class ModifyEmployeeActivity extends AppCompatActivity {
     private String staffGender = "女";
     private String staffDepartment;
     private File staffFaceOne;
+    private byte[] staffFaceOneFeatureData;
     private File staffFaceTwo;
+    private byte[] staffFaceTwoFeatureData;
     private File staffFaceThree;
+    private byte[] staffFaceThreeFeatureData;
     private int whichImg = -6003;
     private StaffDao staffDao = ZffApplication.getDaoSession(this).getStaffDao();
 
@@ -91,18 +95,21 @@ public class ModifyEmployeeActivity extends AppCompatActivity {
             staffDepartmentEdit = findViewById(R.id.staffDepartmentEdit);
             staffDepartmentEdit.setText(staffDepartment);
             staffFaceOne = new File(staff.getStaffFaceOne());
+            staffFaceOneFeatureData = staff.getStaffFaceOneFeatureData();
             Glide.with(this).load(staffFaceOne)
                     .skipMemoryCache(false) //开启内存缓存
                     .diskCacheStrategy(DiskCacheStrategy.NONE)//图片缓存策略,这个一般必须有
                     .error(R.drawable.ic_add_a_photo_black_24dp)// 加载图片失败的时候显示的默认图
                     .into(((ImageView) findViewById(R.id.oneImg)));
             staffFaceTwo = new File(staff.getStaffFaceTwo());
+            staffFaceTwoFeatureData = staff.getStaffFaceTwoFeatureData();
             Glide.with(this).load(staffFaceTwo)
                     .skipMemoryCache(false) //开启内存缓存
                     .diskCacheStrategy(DiskCacheStrategy.NONE)//图片缓存策略,这个一般必须有
                     .error(R.drawable.ic_add_a_photo_black_24dp)// 加载图片失败的时候显示的默认图
                     .into(((ImageView) findViewById(R.id.twoImg)));
             staffFaceThree = new File(staff.getStaffFaceThree());
+            staffFaceThreeFeatureData = staff.getStaffFaceThreeFeatureData();
             Glide.with(this).load(staffFaceThree)
                     .skipMemoryCache(false) //开启内存缓存
                     .diskCacheStrategy(DiskCacheStrategy.NONE)//图片缓存策略,这个一般必须有
@@ -146,7 +153,7 @@ public class ModifyEmployeeActivity extends AppCompatActivity {
                             if (staffFaceOne == null || staffFaceTwo == null || staffFaceThree == null) {
                                 Toast.makeText(this, "请上传三张包含清晰脸部的图片", Toast.LENGTH_SHORT).show();
                             } else {
-                                Staff staff = new Staff(staffId, staffName, staffGender, staffDepartment, staffFaceOne.getAbsolutePath(), staffFaceTwo.getAbsolutePath(), staffFaceThree.getAbsolutePath());
+                                Staff staff = new Staff(staffId, staffName, staffGender, staffDepartment, staffFaceOne.getAbsolutePath(), staffFaceOneFeatureData, staffFaceTwo.getAbsolutePath(), staffFaceTwoFeatureData, staffFaceThree.getAbsolutePath(), staffFaceThreeFeatureData);
                                 staffDao.update(staff);
                                 finish();
                             }
@@ -179,16 +186,25 @@ public class ModifyEmployeeActivity extends AppCompatActivity {
      *
      * @return
      */
-    private File getCurrentFile() {
+    private File getCurrentFile(FaceFeature faceFeature) {
         switch (whichImg) {
             case R.id.oneImg:
-                staffFaceOne = FileUtil.getNewFile(this, "image", staffId + "_staffFaceOne.jpg");
+                staffFaceOne = FileUtil.getFile(this, ".image", staffId + "_staffFaceOne.jpg");
+                if (faceFeature != null) {
+                    staffFaceOneFeatureData = faceFeature.getFeatureData();
+                }
                 return staffFaceOne;
             case R.id.twoImg:
-                staffFaceTwo = FileUtil.getNewFile(this, "image", staffId + "_staffFaceTwo.jpg");
+                staffFaceTwo = FileUtil.getFile(this, ".image", staffId + "_staffFaceTwo.jpg");
+                if (faceFeature != null) {
+                    staffFaceTwoFeatureData = faceFeature.getFeatureData();
+                }
                 return staffFaceTwo;
             case R.id.threeImg:
-                staffFaceThree = FileUtil.getNewFile(this, "image", staffId + "_staffFaceThree.jpg");
+                staffFaceThree = FileUtil.getFile(this, ".image", staffId + "_staffFaceThree.jpg");
+                if (faceFeature != null) {
+                    staffFaceThreeFeatureData = faceFeature.getFeatureData();
+                }
                 return staffFaceThree;
             default:
                 return null;
@@ -242,7 +258,7 @@ public class ModifyEmployeeActivity extends AppCompatActivity {
                             case 1:
                                 //拍照
                                 Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getCurrentFile()));
+                                captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getCurrentFile(null)));
                                 startActivityForResult(captureIntent, CAMERA_REQUEST_CODE);
                                 break;
                         }
@@ -264,7 +280,7 @@ public class ModifyEmployeeActivity extends AppCompatActivity {
             switch (requestCode) {
                 case CAMERA_REQUEST_CODE:
                     //部分机型（vivo v3）返回时会清除currentImageFile所占的内存空间。（重新走MyApplication导致）
-                    Log.v("拍照返回", getCurrentFile() + "");
+                    Log.v("拍照返回", getCurrentFile(null) + "");
                     break;
                 case IMAGE_REQUEST_CODE:
                     Uri selectedImage = data.getData(); // 获取系统返回的照片的Uri
@@ -285,7 +301,7 @@ public class ModifyEmployeeActivity extends AppCompatActivity {
                     try {
                         //文件复制到sd卡中
                         fis = new FileInputStream(tempFile);
-                        fos = new FileOutputStream(getCurrentFile());
+                        fos = new FileOutputStream(getCurrentFile(null));
                         int len = 0;
                         byte[] buffer = new byte[2048];
                         while (-1 != (len = fis.read(buffer))) {
@@ -318,17 +334,30 @@ public class ModifyEmployeeActivity extends AppCompatActivity {
              * faceInfoList - 人脸列表，传入后赋值
              */
             List<FaceInfo> faceInfos = new ArrayList<FaceInfo>();
-            Bitmap bitmap = BitmapFactory.decodeFile(getCurrentFile().getAbsolutePath());
-            int faceEndineDetect = ZffApplication.getFaceEngine().detectFaces(ArcFaceUtil.bitmapToNv21(bitmap, bitmap.getWidth(), bitmap.getHeight()), bitmap.getWidth(), bitmap.getHeight(), FaceEngine.CP_PAF_NV21, faceInfos);
-            if (faceEndineDetect == ErrorInfo.MOK && faceInfos.size() > 0) {
-                Glide.with(this).load(getCurrentFile())
-                        .skipMemoryCache(true) //禁止内存缓存
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)//图片缓存策略,这个一般必须有
-                        .error(R.drawable.ic_add_a_photo_black_24dp)// 加载图片失败的时候显示的默认图
-                        .into(((ImageView) findViewById(whichImg)));
+            Bitmap bitmap = BitmapFactory.decodeFile(getCurrentFile(null).getAbsolutePath());
+            if (ZffApplication.getFaceEngine().detectFaces(ArcFaceUtil.bitmapToNv21(bitmap, bitmap.getWidth(), bitmap.getHeight()), bitmap.getWidth(), bitmap.getHeight(), FaceEngine.CP_PAF_NV21, faceInfos) == ErrorInfo.MOK && faceInfos.size() > 0) {
+                FaceFeature currentFaceFeature = new FaceFeature();
+                int faceEngineExtract = -1;
+                for (FaceInfo faceInfo : faceInfos) {
+                    faceEngineExtract = ZffApplication.getFaceEngine().extractFaceFeature(ArcFaceUtil.bitmapToNv21(bitmap, bitmap.getWidth(), bitmap.getHeight()), bitmap.getWidth(), bitmap.getHeight(), FaceEngine.CP_PAF_NV21, faceInfo, currentFaceFeature);
+                }
+                if (faceEngineExtract == ErrorInfo.MOK) {
+                    Glide.with(this).load(getCurrentFile(currentFaceFeature))
+                            .skipMemoryCache(true) //禁止内存缓存
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)//图片缓存策略,这个一般必须有
+                            .error(R.drawable.ic_add_a_photo_black_24dp)// 加载图片失败的时候显示的默认图
+                            .into(((ImageView) findViewById(whichImg)));
+                } else {
+                    setCurrentFile(null);
+                    Toast.makeText(this, "抱歉，人脸不清晰，请重新选择。", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 setCurrentFile(null);
                 Toast.makeText(this, "抱歉，未检测到人脸，请重新选择。", Toast.LENGTH_SHORT).show();
+            }
+            if (bitmap != null && !bitmap.isRecycled()) {
+                bitmap.recycle();    // 回收bitmap的内存
+                bitmap = null;
             }
         }
     }

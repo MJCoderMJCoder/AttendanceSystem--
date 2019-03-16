@@ -5,13 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
 import com.lzf.attendancesystem.R;
+import com.lzf.attendancesystem.ZffApplication;
 import com.lzf.attendancesystem.bean.Attendance;
+import com.lzf.attendancesystem.bean.AttendanceDao;
 import com.lzf.attendancesystem.util.ReusableAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class NativeViewActivity extends AppCompatActivity {
+    private AttendanceDao attendanceDao = ZffApplication.getDaoSession(this).getAttendanceDao();
     private ReusableAdapter<Attendance> reusableAdapter;
 
     @Override
@@ -19,9 +19,7 @@ public class NativeViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_native_view);
         ListView attendanceList = findViewById(R.id.attendanceList);
-        List<Attendance> attendances = new ArrayList<Attendance>();
-        attendances.add(new Attendance(1, 1, "MJCodder", "2019年3月01日 08:30:00", "2019年3月07日 17:29:00"));
-        reusableAdapter = new ReusableAdapter<Attendance>(attendances, R.layout.item_native_view) {
+        reusableAdapter = new ReusableAdapter<Attendance>(attendanceDao.queryBuilder().orderAsc(AttendanceDao.Properties.AttendanceId).list(), R.layout.item_native_view) {
             @Override
             public void bindView(ViewHolder holder, Attendance obj) {
                 holder.setText(R.id.staffID, obj.getStaffId() + "");

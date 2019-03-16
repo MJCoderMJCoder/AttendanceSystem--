@@ -17,17 +17,17 @@ public class FileUtil {
      * 获取新建的文件
      *
      * @param context  环境上下文
-     * @param dirName  新建的文件所在的上级目录；可以为空
-     * @param fileName
+     * @param dirName  新建的文件所在的上级目录；可以为空（为空时该文件将直接插入项目的根目录）
+     * @param fileName 新建的文件名：可以为空（为空时返回的时目录）
      * @return
      */
-    public static File getNewFile(Context context, String dirName, String fileName) {
+    public static File getFile(Context context, String dirName, String fileName) {
         File currentFile = null;
         try {
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                 File dir;
                 if (dirName != null) {
-                    dir = new File(Environment.getExternalStorageDirectory(), "AttendanceSystem/." + dirName);
+                    dir = new File(Environment.getExternalStorageDirectory(), "AttendanceSystem/" + dirName);
                 } else {
                     dir = new File(Environment.getExternalStorageDirectory(), "AttendanceSystem");
                 }
@@ -38,9 +38,13 @@ public class FileUtil {
                 //                for (int i = 0; i < files.length; i++) {
                 //                    files[i].delete();//删除该文档下的所有文件
                 //                }
-                currentFile = new File(dir, fileName);
-                if (!currentFile.exists()) {
-                    currentFile.createNewFile();
+                if (fileName != null) {
+                    currentFile = new File(dir, fileName);
+                    if (!currentFile.exists()) {
+                        currentFile.createNewFile();
+                    }
+                } else {
+                    currentFile = dir;
                 }
             } else {
                 String dirTemp = null;
@@ -59,7 +63,7 @@ public class FileUtil {
                 }
                 File dir;
                 if (dirName != null) {
-                    dir = new File(dirTemp, "AttendanceSystem/." + dirName);
+                    dir = new File(dirTemp, "AttendanceSystem/" + dirName);
                 } else {
                     dir = new File(dirTemp, "AttendanceSystem");
                 }
@@ -70,9 +74,13 @@ public class FileUtil {
                 //                for (int i = 0; i < files.length; i++) {
                 //                    files[i].delete();//删除该文档下的所有文件
                 //                }
-                currentFile = new File(dir, fileName);
-                if (!currentFile.exists()) {
-                    currentFile.createNewFile();
+                if (fileName != null) {
+                    currentFile = new File(dir, fileName);
+                    if (!currentFile.exists()) {
+                        currentFile.createNewFile();
+                    }
+                } else {
+                    currentFile = dir;
                 }
             }
         } catch (Exception e) {

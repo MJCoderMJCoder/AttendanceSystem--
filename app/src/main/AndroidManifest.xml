@@ -64,9 +64,12 @@
         </activity>
         <activity
             android:name=".activity.NativeViewActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize|stateHidden">
         </activity>
-        <activity android:name=".activity.ModifyEmployeeActivity">
+        <activity
+            android:name=".activity.ModifyEmployeeActivity"
+            android:launchMode="singleTop">
         </activity>
     </application>
 

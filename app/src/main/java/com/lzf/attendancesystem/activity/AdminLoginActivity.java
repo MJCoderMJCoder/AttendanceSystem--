@@ -18,6 +18,9 @@ public class AdminLoginActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.systemSetTime:
+                Intent intent = new Intent();
+                intent.setAction("android.settings.DATE_SETTINGS");
+                startActivity(intent);
                 break;
             case R.id.staffManage:
                 startActivity(new Intent(this, StaffManageActivity.class));
