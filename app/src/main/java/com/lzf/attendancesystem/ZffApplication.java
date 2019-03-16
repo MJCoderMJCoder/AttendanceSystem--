@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.arcsoft.face.FaceEngine;
+import com.lzf.attendancesystem.bean.Admin;
 import com.lzf.attendancesystem.bean.DaoMaster;
 import com.lzf.attendancesystem.bean.DaoSession;
 
@@ -40,39 +41,44 @@ public class ZffApplication extends Application {
     }
 
     public static DaoSession getDaoSession(Context context) {
-        if (daoSession == null) {
-            synchronized (DaoSession.class) {
-                if (daoSession == null) {
-                    // do this once, for example in your Application class
-                    //// note: DevOpenHelper is for dev only, use a OpenHelper subclass instead
-                    DaoMaster.OpenHelper helper = new DaoMaster.OpenHelper(context, "ATTENDANCE_SYSTEM_DATABASE.db", null) {
-                        @Override
-                        public void onCreate(Database db) {
-                            Log.v("Database", "Creating tables for schema version " + DaoMaster.SCHEMA_VERSION);
-                            super.onCreate(db);
-                        }
+        try {
+            if (daoSession == null) {
+                synchronized (DaoSession.class) {
+                    if (daoSession == null) {
+                        // do this once, for example in your Application class
+                        //// note: DevOpenHelper is for dev only, use a OpenHelper subclass instead
+                        DaoMaster.OpenHelper helper = new DaoMaster.OpenHelper(context, "ATTENDANCE_SYSTEM_DATABASE.db", null) {
+                            @Override
+                            public void onCreate(Database db) {
+                                Log.v("Database", "Creating tables for schema version " + DaoMaster.SCHEMA_VERSION);
+                                super.onCreate(db);
+                            }
 
-                        @Override
-                        public void onCreate(SQLiteDatabase db) {
-                            Log.v("SQLiteDatabase", "Creating tables for schema version " + DaoMaster.SCHEMA_VERSION);
-                            super.onCreate(db);
-                        }
+                            @Override
+                            public void onCreate(SQLiteDatabase db) {
+                                Log.v("SQLiteDatabase", "Creating tables for schema version " + DaoMaster.SCHEMA_VERSION);
+                                super.onCreate(db);
+                            }
 
-                        @Override
-                        public void onUpgrade(Database db, int oldVersion, int newVersion) {
-                            Log.v("Database", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
-                            super.onUpgrade(db, oldVersion, newVersion);
-                        }
+                            @Override
+                            public void onUpgrade(Database db, int oldVersion, int newVersion) {
+                                Log.v("Database", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
+                                super.onUpgrade(db, oldVersion, newVersion);
+                            }
 
-                        @Override
-                        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-                            Log.v("SQLiteDatabase", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
-                            super.onUpgrade(db, oldVersion, newVersion);
-                        }
-                    };
-                    daoSession = new DaoMaster(helper.getWritableDatabase()).newSession();
+                            @Override
+                            public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+                                Log.v("SQLiteDatabase", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
+                                super.onUpgrade(db, oldVersion, newVersion);
+                            }
+                        };
+                        daoSession = new DaoMaster(helper.getWritableDatabase()).newSession();
+                        daoSession.getAdminDao().insert(new Admin(1, "admin", "root", "纸纷飞", "男", "598157378@qq.com", "18334706003"));
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return daoSession;
     }

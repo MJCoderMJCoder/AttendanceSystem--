@@ -1,5 +1,6 @@
 package com.lzf.attendancesystem.bean;
 
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -11,7 +12,7 @@ import org.greenrobot.greendao.annotation.Transient;
 import java.io.Serializable;
 
 /**
- * 使用注释来定义模式和员工实体类
+ * 使用注释来定义模式和考勤实体类
  * 该@Entity注解打开Java类到数据库支持的实体。这也将指示greenDAO生成必要的代码（例如DAO）。@Entity 注解标记了一个Java类作为greenDAO一个presistable实体。
  * <p>
  * 数据库端的表和列名称是从实体和属性名称派生的。而不是Java中使用的驼峰案例样式，默认数据库名称是大写的，使用下划线来分隔单词。
@@ -44,7 +45,8 @@ import java.io.Serializable;
         //Note that multiple schemas are currently not supported when using the Gradle plugin.（https://github.com/greenrobot/greenDAO/issues/356）
         // For the time being, continue to use your generator project.（http://greenrobot.org/greendao/documentation/generator/）
 )
-public class Staff implements Serializable {
+public class Admin implements Serializable {
+
     /**
      * 这个@Id注释选择long / Long属性作为实体ID。 在数据库方面，它是主键。 参数autoincrement是一个标志，使ID值不断增加（不重用旧值）。
      * 目前，实体必须用 long或 Long属性作为其主键。这是Android和SQLite的推荐做法。要解决这个问题，可以将key属性定义为一个附加属性，但是要为它创建一个惟一的索引
@@ -59,163 +61,122 @@ public class Staff implements Serializable {
      */
     @Index(unique = true)
     /**
-     * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
-     * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
-     */
-    @NotNull
-    /**
      * 这个@Property注释允许您定义属性映射到的非默认列名称。  @Property(nameInDb = "USERNAME")
      * 如果不存在，greenDAO将以SQL-ish方式使用字段名称（大写，下划线而不是camel情况，例如customName将成为CUSTOM_NAME）。 注意：您当前只能使用内联常量来指定列名。
      */
-    @Property(nameInDb = "STAFF_ID")
-    private long staffId;
+    @Property(nameInDb = "ADMIN_ID")
+    private long adminId;
     /**
      * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
      * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
      */
     @NotNull
-    private String staffName;
+    private String adminAccount;
     /**
      * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
      * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
      */
     @NotNull
-    private String staffGender;
+    private String adminPassword;
     /**
      * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
      * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
      */
     @NotNull
-    private String staffDepartment;
+    private String adminName;
     /**
      * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
      * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
      */
     @NotNull
-    private String staffFaceOne;
-    @NotNull
-    private byte[] staffFaceOneFeatureData;
+    private String adminGender;
     /**
      * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
      * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
      */
     @NotNull
-    private String staffFaceTwo;
-    @NotNull
-    private byte[] staffFaceTwoFeatureData;
+    private String adminEmail;
     /**
      * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
      * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
      */
     @NotNull
-    private String staffFaceThree;
-    @NotNull
-    private byte[] staffFaceThreeFeatureData;
+    private String adminPhone;
     /**
      * 这个@Transient注释标记要从持久性中排除的属性。 将它们用于临时状态等。或者，您也可以使用Java中的transient关键字。
      */
     @Transient
-    private static final long serialVersionUID = 769026186178017624L; // not persisted
+    private static final long serialVersionUID = -8997430981657272709L;
 
-    @Generated(hash = 2117539648)
-    public Staff(long staffId, @NotNull String staffName, @NotNull String staffGender, @NotNull String staffDepartment, @NotNull String staffFaceOne,
-                 @NotNull byte[] staffFaceOneFeatureData, @NotNull String staffFaceTwo, @NotNull byte[] staffFaceTwoFeatureData,
-                 @NotNull String staffFaceThree, @NotNull byte[] staffFaceThreeFeatureData) {
-        this.staffId = staffId;
-        this.staffName = staffName;
-        this.staffGender = staffGender;
-        this.staffDepartment = staffDepartment;
-        this.staffFaceOne = staffFaceOne;
-        this.staffFaceOneFeatureData = staffFaceOneFeatureData;
-        this.staffFaceTwo = staffFaceTwo;
-        this.staffFaceTwoFeatureData = staffFaceTwoFeatureData;
-        this.staffFaceThree = staffFaceThree;
-        this.staffFaceThreeFeatureData = staffFaceThreeFeatureData;
+    @Generated(hash = 1139986266)
+    public Admin(long adminId, @NotNull String adminAccount, @NotNull String adminPassword, @NotNull String adminName, @NotNull String adminGender,
+                 @NotNull String adminEmail, @NotNull String adminPhone) {
+        this.adminId = adminId;
+        this.adminAccount = adminAccount;
+        this.adminPassword = adminPassword;
+        this.adminName = adminName;
+        this.adminGender = adminGender;
+        this.adminEmail = adminEmail;
+        this.adminPhone = adminPhone;
     }
 
-    @Generated(hash = 1774984890)
-    public Staff() {
+    @Generated(hash = 1708792177)
+    public Admin() {
     }
 
-    public long getStaffId() {
-        return this.staffId;
+    public long getAdminId() {
+        return this.adminId;
     }
 
-    public void setStaffId(long staffId) {
-        this.staffId = staffId;
+    public void setAdminId(long adminId) {
+        this.adminId = adminId;
     }
 
-    public String getStaffName() {
-        return this.staffName;
+    public String getAdminAccount() {
+        return this.adminAccount;
     }
 
-    public void setStaffName(String staffName) {
-        this.staffName = staffName;
+    public void setAdminAccount(String adminAccount) {
+        this.adminAccount = adminAccount;
     }
 
-    public String getStaffGender() {
-        return this.staffGender;
+    public String getAdminPassword() {
+        return this.adminPassword;
     }
 
-    public void setStaffGender(String staffGender) {
-        this.staffGender = staffGender;
+    public void setAdminPassword(String adminPassword) {
+        this.adminPassword = adminPassword;
     }
 
-    public String getStaffDepartment() {
-        return this.staffDepartment;
+    public String getAdminName() {
+        return this.adminName;
     }
 
-    public void setStaffDepartment(String staffDepartment) {
-        this.staffDepartment = staffDepartment;
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
     }
 
-    public String getStaffFaceOne() {
-        return this.staffFaceOne;
+    public String getAdminGender() {
+        return this.adminGender;
     }
 
-    public void setStaffFaceOne(String staffFaceOne) {
-        this.staffFaceOne = staffFaceOne;
+    public void setAdminGender(String adminGender) {
+        this.adminGender = adminGender;
     }
 
-    public byte[] getStaffFaceOneFeatureData() {
-        return this.staffFaceOneFeatureData;
+    public String getAdminEmail() {
+        return this.adminEmail;
     }
 
-    public void setStaffFaceOneFeatureData(byte[] staffFaceOneFeatureData) {
-        this.staffFaceOneFeatureData = staffFaceOneFeatureData;
+    public void setAdminEmail(String adminEmail) {
+        this.adminEmail = adminEmail;
     }
 
-    public String getStaffFaceTwo() {
-        return this.staffFaceTwo;
+    public String getAdminPhone() {
+        return this.adminPhone;
     }
 
-    public void setStaffFaceTwo(String staffFaceTwo) {
-        this.staffFaceTwo = staffFaceTwo;
+    public void setAdminPhone(String adminPhone) {
+        this.adminPhone = adminPhone;
     }
-
-    public byte[] getStaffFaceTwoFeatureData() {
-        return this.staffFaceTwoFeatureData;
-    }
-
-    public void setStaffFaceTwoFeatureData(byte[] staffFaceTwoFeatureData) {
-        this.staffFaceTwoFeatureData = staffFaceTwoFeatureData;
-    }
-
-    public String getStaffFaceThree() {
-        return this.staffFaceThree;
-    }
-
-    public void setStaffFaceThree(String staffFaceThree) {
-        this.staffFaceThree = staffFaceThree;
-    }
-
-    public byte[] getStaffFaceThreeFeatureData() {
-        return this.staffFaceThreeFeatureData;
-    }
-
-    public void setStaffFaceThreeFeatureData(byte[] staffFaceThreeFeatureData) {
-        this.staffFaceThreeFeatureData = staffFaceThreeFeatureData;
-    }
-
-
 }

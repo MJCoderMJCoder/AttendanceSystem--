@@ -1,76 +1,105 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.lzf.attendancesystem.activity.AdminLoginActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp"
+                tools:context="com.lzf.attendancesystem.activity.AdminLoginActivity">
 
-    <TextView
-        android:id="@+id/topTxt"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark"
-        android:gravity="center"
-        android:text="纸纷飞管理员欢迎您"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"/>
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"/>
 
     <LinearLayout
+        android:id="@+id/email_login_form"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/topTxt"
-        android:layout_marginTop="25dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:paddingBottom="30dp"
+        android:paddingTop="30dp"
+        android:weightSum="5">
 
-        <Button
-            android:id="@+id/systemSetTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="@drawable/rounded_rectangle"
-            android:onClick="onClick"
-            android:text="设置系统时间"
-            android:textColor="@android:color/white"/>
 
-        <Button
-            android:id="@+id/staffManage"
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="@drawable/rounded_rectangle"
-            android:onClick="onClick"
-            android:text="员工管理"
-            android:textColor="@android:color/white"/>
+            android:layout_height="0dp"
+            android:layout_marginBottom="50dp"
+            android:layout_weight="2"
+            android:src="@drawable/fa_recognition"
+            android:tint="@color/colorPrimaryDark"/>
 
-        <Button
-            android:id="@+id/attendanceDataExport"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="@drawable/rounded_rectangle"
-            android:onClick="onClick"
-            android:text="考勤数据导出"
-            android:textColor="@android:color/white"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:textColorHint="@color/colorPrimaryDark">
 
-        <Button
-            android:id="@+id/attendanceTimeManage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="@drawable/rounded_rectangle"
-            android:onClick="onClick"
-            android:text="考勤时间管理"
-            android:textColor="@android:color/white"/>
+            <AutoCompleteTextView
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:foregroundTint="@color/colorPrimaryDark"
+                android:hint="账号："
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/darker_gray"/>
 
-        <Button
-            android:id="@+id/modifyAccountInfo"
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="@drawable/rounded_rectangle"
-            android:onClick="onClick"
-            android:text="修改账号信息"
-            android:textColor="@android:color/white"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColorHint="@color/colorPrimaryDark">
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimaryDark"
+                android:foregroundTint="@color/colorPrimaryDark"
+                android:hint="密码："
+                android:imeActionId="6"
+                android:imeActionLabel="登录"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/darker_gray"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="bottom">
+
+            <Button
+                android:id="@+id/email_sign_in_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded_rectangle"
+                android:text="登                              录"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"/>
+        </RelativeLayout>
+
+
     </LinearLayout>
 </RelativeLayout>

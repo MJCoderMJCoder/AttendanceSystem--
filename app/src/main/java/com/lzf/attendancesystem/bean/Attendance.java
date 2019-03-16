@@ -2,6 +2,7 @@ package com.lzf.attendancesystem.bean;
 
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.NotNull;
@@ -9,7 +10,6 @@ import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.Transient;
 
 import java.io.Serializable;
-import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * 使用注释来定义模式和考勤实体类
@@ -95,48 +95,58 @@ public class Attendance implements Serializable {
      * 这个@Transient注释标记要从持久性中排除的属性。 将它们用于临时状态等。或者，您也可以使用Java中的transient关键字。
      */
     @Transient
-    private String attendanceRemark; // not persisted
-    @Transient
     private static final long serialVersionUID = -1134974556013000026L; // not persisted
-@Generated(hash = 270108597)
-public Attendance(long attendanceId, int staffId, @NotNull String staffName, @NotNull String signInTime, @NotNull String signOutTime) {
-    this.attendanceId = attendanceId;
-    this.staffId = staffId;
-    this.staffName = staffName;
-    this.signInTime = signInTime;
-    this.signOutTime = signOutTime;
-}
-@Generated(hash = 812698609)
-public Attendance() {
-}
-public long getAttendanceId() {
-    return this.attendanceId;
-}
-public void setAttendanceId(long attendanceId) {
-    this.attendanceId = attendanceId;
-}
-public int getStaffId() {
-    return this.staffId;
-}
-public void setStaffId(int staffId) {
-    this.staffId = staffId;
-}
-public String getStaffName() {
-    return this.staffName;
-}
-public void setStaffName(String staffName) {
-    this.staffName = staffName;
-}
-public String getSignInTime() {
-    return this.signInTime;
-}
-public void setSignInTime(String signInTime) {
-    this.signInTime = signInTime;
-}
-public String getSignOutTime() {
-    return this.signOutTime;
-}
-public void setSignOutTime(String signOutTime) {
-    this.signOutTime = signOutTime;
-}
+
+    @Generated(hash = 270108597)
+    public Attendance(long attendanceId, int staffId, @NotNull String staffName, @NotNull String signInTime, @NotNull String signOutTime) {
+        this.attendanceId = attendanceId;
+        this.staffId = staffId;
+        this.staffName = staffName;
+        this.signInTime = signInTime;
+        this.signOutTime = signOutTime;
+    }
+
+    @Generated(hash = 812698609)
+    public Attendance() {
+    }
+
+    public long getAttendanceId() {
+        return this.attendanceId;
+    }
+
+    public void setAttendanceId(long attendanceId) {
+        this.attendanceId = attendanceId;
+    }
+
+    public int getStaffId() {
+        return this.staffId;
+    }
+
+    public void setStaffId(int staffId) {
+        this.staffId = staffId;
+    }
+
+    public String getStaffName() {
+        return this.staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getSignInTime() {
+        return this.signInTime;
+    }
+
+    public void setSignInTime(String signInTime) {
+        this.signInTime = signInTime;
+    }
+
+    public String getSignOutTime() {
+        return this.signOutTime;
+    }
+
+    public void setSignOutTime(String signOutTime) {
+        this.signOutTime = signOutTime;
+    }
 }
