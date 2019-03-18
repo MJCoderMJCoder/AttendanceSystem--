@@ -81,6 +81,10 @@
             android:label="@string/title_activity_login"
             android:launchMode="singleTop">
         </activity>
+        <activity
+            android:name=".activity.ModifyAccountActivity"
+            android:launchMode="singleTop">
+        </activity>
     </application>
 
 </manifest>

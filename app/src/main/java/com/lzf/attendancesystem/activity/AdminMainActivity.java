@@ -31,6 +31,7 @@ public class AdminMainActivity extends AppCompatActivity {
             case R.id.attendanceTimeManage:
                 break;
             case R.id.modifyAccountInfo:
+                startActivity(new Intent(this, ModifyAccountActivity.class));
                 break;
             default:
                 break;

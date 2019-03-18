@@ -61,7 +61,6 @@ public class ModifyEmployeeActivity extends AppCompatActivity {
     private final int CAMERA_REQUEST_CODE = 6004; //拍照
 
     private EditText staffNameEdit;
-    private RadioGroup radioGroup;
     private EditText staffDepartmentEdit;
 
 
@@ -78,7 +77,7 @@ public class ModifyEmployeeActivity extends AppCompatActivity {
             staffName = staff.getStaffName();
             staffNameEdit = findViewById(R.id.staffNameEdit);
             staffNameEdit.setText(staffName);
-            radioGroup = findViewById(R.id.radioGroup);
+            RadioGroup radioGroup = findViewById(R.id.radioGroup);
             radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
