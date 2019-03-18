@@ -23,7 +23,7 @@ public class NativeViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_native_view);
         ListView attendanceList = findViewById(R.id.attendanceList);
-        reusableAdapter = new ReusableAdapter<Attendance>(attendanceDao.queryBuilder().orderAsc(AttendanceDao.Properties.AttendanceId).list(), R.layout.item_native_view) {
+        reusableAdapter = new ReusableAdapter<Attendance>(attendanceDao.queryBuilder().orderDesc(AttendanceDao.Properties.SignInTime).list(), R.layout.item_native_view) {
             @Override
             public void bindView(ViewHolder holder, Attendance obj) {
                 holder.setText(R.id.staffID, obj.getStaffId() + "");

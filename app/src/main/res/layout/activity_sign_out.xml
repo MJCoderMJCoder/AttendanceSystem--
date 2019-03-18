@@ -6,15 +6,31 @@
     android:layout_height="match_parent"
     tools:context="com.lzf.attendancesystem.activity.SignOutActivity">
 
-    <TextView
+    <RelativeLayout
         android:id="@+id/topTxt"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark"
-        android:gravity="center"
-        android:text="下班签退"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"/>
+        android:background="@color/colorPrimaryDark">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="下班签退"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+
+        <ImageView
+            android:id="@+id/autorenew"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:onClick="onClick"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/ic_autorenew_black_24dp"/>
+    </RelativeLayout>
 
     <TextClock
         android:id="@+id/currentTime"
@@ -36,13 +52,50 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@id/currentTime"/>
 
+    <TextView
+        android:id="@+id/age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/currentTime"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="80dp"
+        android:text=""
+        android:textColor="@color/zffSuccess"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/gender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/age"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
+        android:text=""
+        android:textColor="@color/zffSuccess"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/liveness"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="110dp"
+        android:text=""
+        android:textColor="@color/zffSuccess"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
     <ImageView
-        android:id="@+id/signInSuccess"
+        android:id="@+id/signOutSuccess"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_below="@id/currentTime"
         android:alpha="0.8"
         android:src="@drawable/success"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 </RelativeLayout>

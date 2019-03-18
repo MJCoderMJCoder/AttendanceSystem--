@@ -29,7 +29,8 @@ import com.lzf.attendancesystem.bean.Attendance;
 import com.lzf.attendancesystem.bean.AttendanceDao;
 import com.lzf.attendancesystem.bean.Staff;
 import com.lzf.attendancesystem.bean.StaffDao;
-import com.lzf.attendancesystem.util.CopyFileToSD;
+
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -263,8 +264,6 @@ public class SignInActivity extends AppCompatActivity {
             Toast.makeText(this, "抱歉，摄像头不可用", Toast.LENGTH_SHORT).show();
             finish();
         }
-
-        CopyFileToSD.databaseFile(getPackageName(), "ATTENDANCE_SYSTEM_DATABASE");
     }
 
     public void onClick(View view) {
@@ -334,11 +333,12 @@ public class SignInActivity extends AppCompatActivity {
 
     private synchronized void signInSuccess(Staff staff) {
         try {
-            List<Attendance> attendances = attendanceDao.queryBuilder().where(AttendanceDao.Properties.SignInTime.gt(today), AttendanceDao.Properties.StaffId.eq(staff.getStaffId()), AttendanceDao.Properties.StaffName.eq(staff.getStaffName()), AttendanceDao.Properties.StaffDepartment.eq(staff.getStaffDepartment())).list();
+            QueryBuilder<Attendance> queryBuilder = attendanceDao.queryBuilder();
+            queryBuilder.where(AttendanceDao.Properties.StaffId.eq(staff.getStaffId()), AttendanceDao.Properties.StaffName.eq(staff.getStaffName()), AttendanceDao.Properties.StaffDepartment.eq(staff.getStaffDepartment()), queryBuilder.or(AttendanceDao.Properties.SignInTime.gt(today), AttendanceDao.Properties.SignOutTime.gt(today)));
+            List<Attendance> attendances = queryBuilder.list();
             if (attendances != null && attendances.size() > 0) {
                 Attendance attendance = attendances.get(0);
                 attendance.setSignInTime(System.currentTimeMillis());
-                attendance.setSignOutTime(0L);
                 attendanceDao.update(attendance);
             } else {
                 Cursor cursor = null;
