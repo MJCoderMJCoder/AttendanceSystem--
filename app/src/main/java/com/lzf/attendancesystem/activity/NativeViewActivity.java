@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.lzf.attendancesystem.R;
 import com.lzf.attendancesystem.ZffApplication;
@@ -73,29 +74,33 @@ public class NativeViewActivity extends AppCompatActivity {
                     String staffId = staffIDEdit.getText().toString().trim();
                     long startDate = simpleDateFormat.parse(startDatePicker.getYear() + "年" + (startDatePicker.getMonth() + 1) + "月" + startDatePicker.getDayOfMonth() + "日" + " 00:00:00").getTime();
                     long endDate = simpleDateFormat.parse(endDatePicker.getYear() + "年" + (endDatePicker.getMonth() + 1) + "月" + endDatePicker.getDayOfMonth() + "日" + " 23:59:59").getTime();
-                    QueryBuilder<Attendance> queryBuilder = attendanceDao.queryBuilder();
-                    if (staffIDCheck.isChecked()) {
-                        if (startTimeCheck.isChecked()) {
-                            if (endTimeCheck.isChecked()) {
-                                queryBuilder.where(AttendanceDao.Properties.StaffId.eq(staffId), queryBuilder.or(queryBuilder.and(AttendanceDao.Properties.SignInTime.ge(startDate), AttendanceDao.Properties.SignInTime.le(endDate)), queryBuilder.and(AttendanceDao.Properties.SignOutTime.ge(startDate), AttendanceDao.Properties.SignOutTime.le(endDate))));
+                    if (endDate > startDate) {
+                        QueryBuilder<Attendance> queryBuilder = attendanceDao.queryBuilder();
+                        if (staffIDCheck.isChecked()) {
+                            if (startTimeCheck.isChecked()) {
+                                if (endTimeCheck.isChecked()) {
+                                    queryBuilder.where(AttendanceDao.Properties.StaffId.eq(staffId), queryBuilder.or(queryBuilder.and(AttendanceDao.Properties.SignInTime.ge(startDate), AttendanceDao.Properties.SignInTime.le(endDate)), queryBuilder.and(AttendanceDao.Properties.SignOutTime.ge(startDate), AttendanceDao.Properties.SignOutTime.le(endDate))));
+                                } else {
+                                    queryBuilder.where(AttendanceDao.Properties.StaffId.eq(staffId), queryBuilder.or(AttendanceDao.Properties.SignInTime.ge(startDate), AttendanceDao.Properties.SignOutTime.ge(startDate)));
+                                }
+                            } else if (endTimeCheck.isChecked()) {
+                                queryBuilder.where(AttendanceDao.Properties.StaffId.eq(staffId), queryBuilder.or(AttendanceDao.Properties.SignInTime.le(endDate), AttendanceDao.Properties.SignOutTime.le(endDate)));
                             } else {
-                                queryBuilder.where(AttendanceDao.Properties.StaffId.eq(staffId), queryBuilder.or(AttendanceDao.Properties.SignInTime.ge(startDate), AttendanceDao.Properties.SignOutTime.ge(startDate)));
+                                queryBuilder.where(AttendanceDao.Properties.StaffId.eq(staffId));
+                            }
+                        } else if (startTimeCheck.isChecked()) {
+                            if (endTimeCheck.isChecked()) {
+                                queryBuilder.where(queryBuilder.or(queryBuilder.and(AttendanceDao.Properties.SignInTime.ge(startDate), AttendanceDao.Properties.SignInTime.le(endDate)), queryBuilder.and(AttendanceDao.Properties.SignOutTime.ge(startDate), AttendanceDao.Properties.SignOutTime.le(endDate))));
+                            } else {
+                                queryBuilder.where(queryBuilder.or(AttendanceDao.Properties.SignInTime.ge(startDate), AttendanceDao.Properties.SignOutTime.ge(startDate)));
                             }
                         } else if (endTimeCheck.isChecked()) {
-                            queryBuilder.where(AttendanceDao.Properties.StaffId.eq(staffId), queryBuilder.or(AttendanceDao.Properties.SignInTime.le(endDate), AttendanceDao.Properties.SignOutTime.le(endDate)));
-                        } else {
-                            queryBuilder.where(AttendanceDao.Properties.StaffId.eq(staffId));
+                            queryBuilder.where(queryBuilder.or(AttendanceDao.Properties.SignInTime.le(endDate), AttendanceDao.Properties.SignOutTime.le(endDate)));
                         }
-                    } else if (startTimeCheck.isChecked()) {
-                        if (endTimeCheck.isChecked()) {
-                            queryBuilder.where(queryBuilder.or(queryBuilder.and(AttendanceDao.Properties.SignInTime.ge(startDate), AttendanceDao.Properties.SignInTime.le(endDate)), queryBuilder.and(AttendanceDao.Properties.SignOutTime.ge(startDate), AttendanceDao.Properties.SignOutTime.le(endDate))));
-                        } else {
-                            queryBuilder.where(queryBuilder.or(AttendanceDao.Properties.SignInTime.ge(startDate), AttendanceDao.Properties.SignOutTime.ge(startDate)));
-                        }
-                    } else if (endTimeCheck.isChecked()) {
-                        queryBuilder.where(queryBuilder.or(AttendanceDao.Properties.SignInTime.le(endDate), AttendanceDao.Properties.SignOutTime.le(endDate)));
+                        reusableAdapter.updateAll(queryBuilder.orderDesc(AttendanceDao.Properties.SignInTime).list());
+                    } else {
+                        Toast.makeText(this, "起始时间不能大于截止时间", Toast.LENGTH_SHORT).show();
                     }
-                    reusableAdapter.updateAll(queryBuilder.orderDesc(AttendanceDao.Properties.SignInTime).list());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
