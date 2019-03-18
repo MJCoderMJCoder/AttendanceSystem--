@@ -1,6 +1,7 @@
 package com.lzf.attendancesystem.activity;
 
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -24,14 +25,20 @@ import com.arcsoft.face.GenderInfo;
 import com.arcsoft.face.LivenessInfo;
 import com.lzf.attendancesystem.R;
 import com.lzf.attendancesystem.ZffApplication;
+import com.lzf.attendancesystem.bean.Attendance;
+import com.lzf.attendancesystem.bean.AttendanceDao;
 import com.lzf.attendancesystem.bean.Staff;
 import com.lzf.attendancesystem.bean.StaffDao;
+import com.lzf.attendancesystem.util.CopyFileToSD;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 public class SignInActivity extends AppCompatActivity {
-    private int cameraId; //照相机（硬件）对象
+    private int currentCameraID; //当前摄像头ID
+    private int frontCameraId; //前置摄像头ID
+    private int backCameraId; //后置摄像头ID
     private Camera camera; //照相机（硬件）对象
     private MediaRecorder mediaRecorder; //录制视频
     private SurfaceView surfaceView; //预览视图
@@ -41,6 +48,133 @@ public class SignInActivity extends AppCompatActivity {
     private TextView liveness;
     private ImageView signInSuccess;
     private List<Staff> staffList = ZffApplication.getDaoSession(this).getStaffDao().queryBuilder().orderAsc(StaffDao.Properties.StaffId).list();
+
+    private AttendanceDao attendanceDao = ZffApplication.getDaoSession(this).getAttendanceDao();
+    private long today = System.currentTimeMillis() / (1000 * 3600 * 24) * (1000 * 3600 * 24) - TimeZone.getDefault().getRawOffset();//今天零点零分零秒的毫秒数
+
+    private Camera.PreviewCallback previewCallback = new Camera.PreviewCallback() {
+        @Override
+        public void onPreviewFrame(byte[] data, Camera camera) {
+            /**
+             * data - 输入的图像数据
+             * width - 图像的宽度
+             * height - 图像的高度
+             * format - 图像的颜色空间格式，支持NV21(CP_PAF_NV21)、BGR24(CP_PAF_BGR24)
+             * faceInfoList - 人脸列表，传入后赋值
+             */
+            List<FaceInfo> faceInfos = new ArrayList<FaceInfo>();
+            Camera.Size previewSize = camera.getParameters().getPreviewSize();
+            if (ZffApplication.getFaceEngine().detectFaces(data, previewSize.width, previewSize.height, FaceEngine.CP_PAF_NV21, faceInfos) == ErrorInfo.MOK && faceInfos.size() > 0) {
+                for (FaceInfo faceInfo : faceInfos) {
+                    FaceFeature currentFaceFeature = new FaceFeature();
+                    if (ZffApplication.getFaceEngine().extractFaceFeature(data, previewSize.width, previewSize.height, FaceEngine.CP_PAF_NV21, faceInfo, currentFaceFeature) == ErrorInfo.MOK) {
+                        FaceSimilar faceSimilar = new FaceSimilar();
+                        for (Staff staff : staffList) {
+                            FaceFeature compareFaceFeature = new FaceFeature();
+                            compareFaceFeature.setFeatureData(staff.getStaffFaceOneFeatureData());
+                            if (ZffApplication.getFaceEngine().compareFaceFeature(currentFaceFeature, compareFaceFeature, faceSimilar) == ErrorInfo.MOK) {
+                                Log.v("faceSimilar.getScore()", faceSimilar.getScore() + "");
+                                if (faceSimilar.getScore() >= 0.65f) { //签到成功
+                                    signInSuccess(staff);
+                                }
+                            }
+                            compareFaceFeature.setFeatureData(staff.getStaffFaceTwoFeatureData());
+                            if (ZffApplication.getFaceEngine().compareFaceFeature(currentFaceFeature, compareFaceFeature, faceSimilar) == ErrorInfo.MOK) {
+                                Log.v("faceSimilar.getScore()", faceSimilar.getScore() + "");
+                                if (faceSimilar.getScore() > 0.65f) { //签到成功
+                                    signInSuccess(staff);
+                                }
+                            }
+                            compareFaceFeature.setFeatureData(staff.getStaffFaceThreeFeatureData());
+                            if (ZffApplication.getFaceEngine().compareFaceFeature(currentFaceFeature, compareFaceFeature, faceSimilar) == ErrorInfo.MOK) {
+                                Log.v("faceSimilar.getScore()", faceSimilar.getScore() + "");
+                                if (faceSimilar.getScore() > 0.65f) { //签到成功
+                                    signInSuccess(staff);
+                                }
+                            }
+                        }
+                    }
+                }
+                int faceEndineProcess = ZffApplication.getFaceEngine().process(data, previewSize.width, previewSize.height, FaceEngine.CP_PAF_NV21, faceInfos, FaceEngine.ASF_AGE | FaceEngine.ASF_GENDER | FaceEngine.ASF_FACE3DANGLE | FaceEngine.ASF_LIVENESS);
+                if (faceEndineProcess == ErrorInfo.MOK) {
+                    List<AgeInfo> ageInfos = new ArrayList<AgeInfo>();
+                    int faceEndineAge = ZffApplication.getFaceEngine().getAge(ageInfos);
+                    if (faceEndineAge == ErrorInfo.MOK) {
+                        for (AgeInfo ageInfo : ageInfos) {
+                            ageValue = ageInfo.getAge();
+                            if (ageInfo.getAge() == AgeInfo.UNKNOWN_AGE) {
+                                age.setText("");
+                            } else {
+                                age.setText(ageInfo.getAge() + "岁");
+                            }
+                        }
+                    }
+                    List<GenderInfo> genderInfos = new ArrayList<GenderInfo>();
+                    int faceEndineGender = ZffApplication.getFaceEngine().getGender(genderInfos);
+                    if (faceEndineGender == ErrorInfo.MOK) {
+                        for (GenderInfo genderInfo : genderInfos) {
+                            if (genderInfo.getGender() == GenderInfo.FEMALE) {
+                                if (ageValue < 11) {
+                                    gender.setText("小可爱");
+                                } else if (ageValue >= 11 && ageValue < 15) {
+                                    gender.setText("豆蔻年华");
+                                } else if (ageValue >= 15 && ageValue < 25) {
+                                    gender.setText("美少女");
+                                } else if (ageValue >= 25 && ageValue < 30) {
+                                    gender.setText("花房姑娘");
+                                } else if (ageValue >= 30 && ageValue < 35) {
+                                    gender.setText("仙女");
+                                } else if (ageValue >= 35 && ageValue < 45) {
+                                    gender.setText("御姐"); //半老徐娘
+                                } else if (ageValue >= 45 && ageValue < 60) {
+                                    gender.setText("阿姨，求介绍对象！");
+                                } else if (ageValue >= 60) {
+                                    gender.setText("奶奶，你保养的真好，简直就是鹤发童颜啊！");
+                                }
+                            } else if (genderInfo.getGender() == GenderInfo.MALE) {
+                                if (ageValue < 11) {
+                                    gender.setText("少年");
+                                } else if (ageValue >= 11 && ageValue < 15) {
+                                    gender.setText("帅小伙");
+                                } else if (ageValue >= 15 && ageValue < 25) {
+                                    gender.setText("小鲜肉！");
+                                } else if (ageValue >= 25 && ageValue < 30) {
+                                    gender.setText("哇！帅哥！");
+                                } else if (ageValue >= 30 && ageValue < 40) {
+                                    gender.setText("三十而立，四十不惑。");
+                                } else if (ageValue >= 40 && ageValue < 45) {
+                                    gender.setText("身体困了吧？大叔！"); //半老徐娘
+                                } else if (ageValue >= 45 && ageValue < 60) {
+                                    gender.setText("知天命，入花甲。");
+                                } else if (ageValue >= 60 && ageValue < 75) {
+                                    gender.setText("爷爷，一看你就是老而益壮！");
+                                } else if (ageValue >= 75) {
+                                    gender.setText("爷爷，你是否已饱经风霜？"); //饱经风霜//老气横秋//老而益壮
+                                }
+                            } else {
+                                gender.setText("");
+                            }
+                        }
+                    }
+                    List<LivenessInfo> livenessInfos = new ArrayList<LivenessInfo>();
+                    int faceEndineLiveness = ZffApplication.getFaceEngine().getLiveness(livenessInfos);
+                    if (faceEndineLiveness == ErrorInfo.MOK) {
+                        for (LivenessInfo livenessInfo : livenessInfos) {
+                            if (livenessInfo.getLiveness() == LivenessInfo.ALIVE) {
+                                liveness.setText("嗯，一看你就是能量慢慢，充满活力。");
+                            } else if (livenessInfo.getLiveness() == LivenessInfo.NOT_ALIVE) {
+                                liveness.setText("一动不动是王八！");
+                            } else if (livenessInfo.getLiveness() == LivenessInfo.FACE_NUM_MORE_THAN_ONE) {
+                                liveness.setText("这么多人，一个一个来好吗？");
+                            } else {
+                                liveness.setText("");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
     private SurfaceHolder.Callback surfaceHolderCallback = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(SurfaceHolder holder) { //开始预览
@@ -49,142 +183,22 @@ public class SignInActivity extends AppCompatActivity {
                     Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
                     for (int cameraIndex = 0; cameraIndex < Camera.getNumberOfCameras(); cameraIndex++) {
                         Camera.getCameraInfo(cameraIndex, cameraInfo);
-                        /*if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                            cameraId = cameraIndex;
-                            camera = Camera.open(cameraIndex); //前置摄像头
-                            camera.setDisplayOrientation(270);   //让相机旋转270度
-                            break;
-                        } else */
-                        if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
-                            cameraId = cameraIndex;
-                            camera = Camera.open(cameraIndex); //前置摄像头
-                            camera.setDisplayOrientation(90);   //让相机旋转90度
-                            break;
+                        if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                            frontCameraId = cameraIndex;
+                            //                            camera = Camera.open(frontCameraId); //前置摄像头
+                            //                            camera.setDisplayOrientation(270);   //让相机旋转270度
+                        } else if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                            backCameraId = cameraIndex;
+                            //                            camera = Camera.open(backCameraId); //后置摄像头
+                            //                            camera.setDisplayOrientation(90);   //让相机旋转90度
                         }
                     }
+                    currentCameraID = backCameraId;
+                    camera = Camera.open(currentCameraID);
+                    camera.setDisplayOrientation(90);   //让相机旋转90度
                 }
                 camera.setPreviewDisplay(surfaceView.getHolder());
-                camera.setPreviewCallback(new Camera.PreviewCallback() {
-                    @Override
-                    public void onPreviewFrame(byte[] data, Camera camera) {
-                        /**
-                         * data - 输入的图像数据
-                         * width - 图像的宽度
-                         * height - 图像的高度
-                         * format - 图像的颜色空间格式，支持NV21(CP_PAF_NV21)、BGR24(CP_PAF_BGR24)
-                         * faceInfoList - 人脸列表，传入后赋值
-                         */
-                        List<FaceInfo> faceInfos = new ArrayList<FaceInfo>();
-                        Camera.Size previewSize = camera.getParameters().getPreviewSize();
-                        if (ZffApplication.getFaceEngine().detectFaces(data, previewSize.width, previewSize.height, FaceEngine.CP_PAF_NV21, faceInfos) == ErrorInfo.MOK && faceInfos.size() > 0) {
-                            for (FaceInfo faceInfo : faceInfos) {
-                                FaceFeature currentFaceFeature = new FaceFeature();
-                                if (ZffApplication.getFaceEngine().extractFaceFeature(data, previewSize.width, previewSize.height, FaceEngine.CP_PAF_NV21, faceInfo, currentFaceFeature) == ErrorInfo.MOK) {
-                                    FaceSimilar faceSimilar = new FaceSimilar();
-                                    for (Staff staff : staffList) {
-                                        FaceFeature compareFaceFeature = new FaceFeature();
-                                        compareFaceFeature.setFeatureData(staff.getStaffFaceOneFeatureData());
-                                        if (ZffApplication.getFaceEngine().compareFaceFeature(currentFaceFeature, compareFaceFeature, faceSimilar) == ErrorInfo.MOK) {
-                                            if (faceSimilar.getScore() > 0.8f) { //签到成功
-                                                signInSuccess.setVisibility(View.VISIBLE);
-                                            }
-                                        }
-                                        compareFaceFeature.setFeatureData(staff.getStaffFaceTwoFeatureData());
-                                        if (ZffApplication.getFaceEngine().compareFaceFeature(currentFaceFeature, compareFaceFeature, faceSimilar) == ErrorInfo.MOK) {
-                                            if (faceSimilar.getScore() > 0.8f) { //签到成功
-                                                signInSuccess.setVisibility(View.VISIBLE);
-
-                                            }
-                                        }
-                                        compareFaceFeature.setFeatureData(staff.getStaffFaceThreeFeatureData());
-                                        if (ZffApplication.getFaceEngine().compareFaceFeature(currentFaceFeature, compareFaceFeature, faceSimilar) == ErrorInfo.MOK) {
-                                            if (faceSimilar.getScore() > 0.8f) { //签到成功
-                                                signInSuccess.setVisibility(View.VISIBLE);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            int faceEndineProcess = ZffApplication.getFaceEngine().process(data, previewSize.width, previewSize.height, FaceEngine.CP_PAF_NV21, faceInfos, FaceEngine.ASF_AGE | FaceEngine.ASF_GENDER | FaceEngine.ASF_FACE3DANGLE | FaceEngine.ASF_LIVENESS);
-                            if (faceEndineProcess == ErrorInfo.MOK) {
-                                List<AgeInfo> ageInfos = new ArrayList<AgeInfo>();
-                                int faceEndineAge = ZffApplication.getFaceEngine().getAge(ageInfos);
-                                if (faceEndineAge == ErrorInfo.MOK) {
-                                    for (AgeInfo ageInfo : ageInfos) {
-                                        ageValue = ageInfo.getAge();
-                                        if (ageInfo.getAge() == AgeInfo.UNKNOWN_AGE) {
-                                            age.setText("");
-                                        } else {
-                                            age.setText(ageInfo.getAge() + "岁");
-                                        }
-                                    }
-                                }
-                                List<GenderInfo> genderInfos = new ArrayList<GenderInfo>();
-                                int faceEndineGender = ZffApplication.getFaceEngine().getGender(genderInfos);
-                                if (faceEndineGender == ErrorInfo.MOK) {
-                                    for (GenderInfo genderInfo : genderInfos) {
-                                        if (genderInfo.getGender() == GenderInfo.FEMALE) {
-                                            if (ageValue < 11) {
-                                                gender.setText("小可爱");
-                                            } else if (ageValue >= 11 && ageValue < 15) {
-                                                gender.setText("豆蔻年华");
-                                            } else if (ageValue >= 15 && ageValue < 25) {
-                                                gender.setText("美少女");
-                                            } else if (ageValue >= 25 && ageValue < 30) {
-                                                gender.setText("花房姑娘");
-                                            } else if (ageValue >= 30 && ageValue < 35) {
-                                                gender.setText("仙女");
-                                            } else if (ageValue >= 35 && ageValue < 45) {
-                                                gender.setText("御姐"); //半老徐娘
-                                            } else if (ageValue >= 45 && ageValue < 60) {
-                                                gender.setText("阿姨，求介绍对象！");
-                                            } else if (ageValue >= 60) {
-                                                gender.setText("奶奶，你保养的真好，简直就是鹤发童颜啊！");
-                                            }
-                                        } else if (genderInfo.getGender() == GenderInfo.MALE) {
-                                            if (ageValue < 11) {
-                                                gender.setText("少年");
-                                            } else if (ageValue >= 11 && ageValue < 15) {
-                                                gender.setText("帅小伙");
-                                            } else if (ageValue >= 15 && ageValue < 25) {
-                                                gender.setText("小鲜肉！");
-                                            } else if (ageValue >= 25 && ageValue < 30) {
-                                                gender.setText("哇！帅哥！");
-                                            } else if (ageValue >= 30 && ageValue < 40) {
-                                                gender.setText("三十而立，四十不惑。");
-                                            } else if (ageValue >= 40 && ageValue < 45) {
-                                                gender.setText("身体困了吧？大叔！"); //半老徐娘
-                                            } else if (ageValue >= 45 && ageValue < 60) {
-                                                gender.setText("知天命，入花甲。");
-                                            } else if (ageValue >= 60 && ageValue < 75) {
-                                                gender.setText("爷爷，一看你就是老而益壮！");
-                                            } else if (ageValue >= 75) {
-                                                gender.setText("爷爷，你是否已饱经风霜？"); //饱经风霜//老气横秋//老而益壮
-                                            }
-                                        } else {
-                                            gender.setText("");
-                                        }
-                                    }
-                                }
-                                List<LivenessInfo> livenessInfos = new ArrayList<LivenessInfo>();
-                                int faceEndineLiveness = ZffApplication.getFaceEngine().getLiveness(livenessInfos);
-                                if (faceEndineLiveness == ErrorInfo.MOK) {
-                                    for (LivenessInfo livenessInfo : livenessInfos) {
-                                        if (livenessInfo.getLiveness() == LivenessInfo.ALIVE) {
-                                            liveness.setText("嗯，一看你就是能量慢慢，充满活力。");
-                                        } else if (livenessInfo.getLiveness() == LivenessInfo.NOT_ALIVE) {
-                                            liveness.setText("一动不动是王八！");
-                                        } else if (livenessInfo.getLiveness() == LivenessInfo.FACE_NUM_MORE_THAN_ONE) {
-                                            liveness.setText("这么多人，一个一个来好吗？");
-                                        } else {
-                                            liveness.setText("");
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
+                camera.setPreviewCallback(previewCallback);
                 camera.startPreview();
                 //                if (camera != null) {
                 //                    camera.unlock(); //从Android 4.0 (API 14)开始, Camera.lock() 和 Camera.unlock() 的调用已经被自动管理了。
@@ -249,8 +263,48 @@ public class SignInActivity extends AppCompatActivity {
             Toast.makeText(this, "抱歉，摄像头不可用", Toast.LENGTH_SHORT).show();
             finish();
         }
+
+        CopyFileToSD.databaseFile(getPackageName(), "ATTENDANCE_SYSTEM_DATABASE");
     }
 
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.autorenew:
+                try {
+                    age.setText("");
+                    gender.setText("");
+                    liveness.setText("");
+                    if (camera != null) {
+                        //                camera.lock(); //从Android 4.0 (API 14)开始, Camera.lock() 和 Camera.unlock() 的调用已经被自动管理了。
+                        camera.stopPreview();
+                        camera.setPreviewCallback(null);
+                        camera.setPreviewDisplay(null);
+                        camera.release();
+                        camera = null;
+                    }
+                    if (currentCameraID == frontCameraId) {
+                        currentCameraID = backCameraId;
+                        camera = Camera.open(currentCameraID);
+                        camera.setDisplayOrientation(90);   //让相机旋转90度
+                        camera.setPreviewDisplay(surfaceView.getHolder());
+                        camera.setPreviewCallback(previewCallback);
+                        camera.startPreview();
+                    } else if (currentCameraID == backCameraId) {
+                        currentCameraID = frontCameraId;
+                        camera = Camera.open(currentCameraID);
+                        camera.setDisplayOrientation(270);   //让相机旋转270度
+                        camera.setPreviewDisplay(surfaceView.getHolder());
+                        camera.setPreviewCallback(previewCallback);
+                        camera.startPreview();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
     /**
      * 摄像头是否存在
@@ -275,6 +329,51 @@ public class SignInActivity extends AppCompatActivity {
         int faceEngineInit = ZffApplication.getFaceEngine().init(this, FaceEngine.ASF_DETECT_MODE_VIDEO, FaceEngine.ASF_OP_0_HIGHER_EXT, 10, 1, FaceEngine.ASF_NONE | FaceEngine.ASF_FACE_DETECT | FaceEngine.ASF_FACE_RECOGNITION | FaceEngine.ASF_AGE | FaceEngine.ASF_GENDER | FaceEngine.ASF_FACE3DANGLE | FaceEngine.ASF_LIVENESS);
         Log.v("faceEngineInit", faceEngineInit + "");
         return faceEngineInit == ErrorInfo.MOK;
+    }
+
+
+    private synchronized void signInSuccess(Staff staff) {
+        try {
+            List<Attendance> attendances = attendanceDao.queryBuilder().where(AttendanceDao.Properties.SignInTime.gt(today), AttendanceDao.Properties.StaffId.eq(staff.getStaffId()), AttendanceDao.Properties.StaffName.eq(staff.getStaffName()), AttendanceDao.Properties.StaffDepartment.eq(staff.getStaffDepartment())).list();
+            if (attendances != null && attendances.size() > 0) {
+                Attendance attendance = attendances.get(0);
+                attendance.setSignInTime(System.currentTimeMillis());
+                attendance.setSignOutTime(0L);
+                attendanceDao.update(attendance);
+            } else {
+                Cursor cursor = null;
+                long attendanceId = 0;
+                try {
+                    cursor = ZffApplication.getDaoSession(this).getDatabase().rawQuery("select max(ATTENDANCE_ID) MAX_ATTENDANCE_ID from ATTENDANCE", null);
+                    while (cursor.moveToNext()) {
+                        attendanceId = cursor.getLong(cursor.getColumnIndex("MAX_ATTENDANCE_ID")) + 1;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+                attendanceDao.insert(new Attendance(attendanceId, staff.getStaffId(), staff.getStaffName(), staff.getStaffDepartment(), System.currentTimeMillis(), 0L));
+            }
+            if (!"".equals(age.getText().toString()) && !"".equals(gender.getText().toString()) && !"".equals(liveness.getText().toString())) {
+                signInSuccess.setVisibility(View.VISIBLE);
+                if (camera != null) {
+                    //                camera.lock(); //从Android 4.0 (API 14)开始, Camera.lock() 和 Camera.unlock() 的调用已经被自动管理了。
+                    camera.setPreviewCallback(null);
+                    camera.setPreviewDisplay(null);
+                    camera.stopPreview();
+                    camera.release();
+                    camera = null;
+                }
+                //调用FaceEngine的unInit方法销毁引擎。在init成功后如不unInit会导致内存泄漏。
+                ZffApplication.getFaceEngine().unInit();
+                finish();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

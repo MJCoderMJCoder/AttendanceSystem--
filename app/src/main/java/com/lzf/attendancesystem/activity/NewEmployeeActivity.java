@@ -109,7 +109,7 @@ public class NewEmployeeActivity extends AppCompatActivity {
                         if ("".equals(staffDepartment)) {
                             Toast.makeText(this, "请输入部门名称", Toast.LENGTH_SHORT).show();
                         } else {
-                            if (staffFaceOne == null || staffFaceTwo == null || staffFaceThree == null) {
+                            if (staffFaceOne == null || staffFaceOneFeatureData == null || staffFaceTwo == null || staffFaceThreeFeatureData == null || staffFaceThree == null || staffFaceThreeFeatureData == null) {
                                 Toast.makeText(this, "请上传三张包含清晰脸部的图片", Toast.LENGTH_SHORT).show();
                             } else {
                                 Staff staff = new Staff(staffId, staffName, staffGender, staffDepartment, staffFaceOne.getAbsolutePath(), staffFaceOneFeatureData, staffFaceTwo.getAbsolutePath(), staffFaceTwoFeatureData, staffFaceThree.getAbsolutePath(), staffFaceThreeFeatureData);

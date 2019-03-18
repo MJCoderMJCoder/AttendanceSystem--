@@ -61,7 +61,8 @@
             android:background="@drawable/rounded_rectangle"
             android:onClick="onClick"
             android:text="考勤时间管理"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/modifyAccountInfo"

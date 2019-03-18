@@ -72,7 +72,7 @@ public class Attendance implements Serializable {
      * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
      */
     @NotNull
-    private int staffId;
+    private long staffId;
     /**
      * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
      * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
@@ -84,24 +84,31 @@ public class Attendance implements Serializable {
      * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
      */
     @NotNull
-    private String signInTime;
+    private String staffDepartment;
     /**
      * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
      * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
      */
     @NotNull
-    private String signOutTime;
+    private long signInTime;
+    /**
+     * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
+     * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
+     */
+    @NotNull
+    private long signOutTime;
     /**
      * 这个@Transient注释标记要从持久性中排除的属性。 将它们用于临时状态等。或者，您也可以使用Java中的transient关键字。
      */
     @Transient
     private static final long serialVersionUID = -1134974556013000026L; // not persisted
 
-    @Generated(hash = 270108597)
-    public Attendance(long attendanceId, int staffId, @NotNull String staffName, @NotNull String signInTime, @NotNull String signOutTime) {
+    @Generated(hash = 1893668669)
+    public Attendance(long attendanceId, long staffId, @NotNull String staffName, @NotNull String staffDepartment, long signInTime, long signOutTime) {
         this.attendanceId = attendanceId;
         this.staffId = staffId;
         this.staffName = staffName;
+        this.staffDepartment = staffDepartment;
         this.signInTime = signInTime;
         this.signOutTime = signOutTime;
     }
@@ -118,11 +125,11 @@ public class Attendance implements Serializable {
         this.attendanceId = attendanceId;
     }
 
-    public int getStaffId() {
+    public long getStaffId() {
         return this.staffId;
     }
 
-    public void setStaffId(int staffId) {
+    public void setStaffId(long staffId) {
         this.staffId = staffId;
     }
 
@@ -134,19 +141,27 @@ public class Attendance implements Serializable {
         this.staffName = staffName;
     }
 
-    public String getSignInTime() {
+    public String getStaffDepartment() {
+        return this.staffDepartment;
+    }
+
+    public void setStaffDepartment(String staffDepartment) {
+        this.staffDepartment = staffDepartment;
+    }
+
+    public long getSignInTime() {
         return this.signInTime;
     }
 
-    public void setSignInTime(String signInTime) {
+    public void setSignInTime(long signInTime) {
         this.signInTime = signInTime;
     }
 
-    public String getSignOutTime() {
+    public long getSignOutTime() {
         return this.signOutTime;
     }
 
-    public void setSignOutTime(String signOutTime) {
+    public void setSignOutTime(long signOutTime) {
         this.signOutTime = signOutTime;
     }
 }

@@ -10,9 +10,13 @@ import com.lzf.attendancesystem.bean.Attendance;
 import com.lzf.attendancesystem.bean.AttendanceDao;
 import com.lzf.attendancesystem.util.ReusableAdapter;
 
+import java.text.SimpleDateFormat;
+
 public class NativeViewActivity extends AppCompatActivity {
     private AttendanceDao attendanceDao = ZffApplication.getDaoSession(this).getAttendanceDao();
     private ReusableAdapter<Attendance> reusableAdapter;
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +28,16 @@ public class NativeViewActivity extends AppCompatActivity {
             public void bindView(ViewHolder holder, Attendance obj) {
                 holder.setText(R.id.staffID, obj.getStaffId() + "");
                 holder.setText(R.id.staffName, obj.getStaffName());
-                holder.setText(R.id.signInTime, obj.getSignInTime());
-                holder.setText(R.id.signOutTime, obj.getSignOutTime());
+                if (obj.getSignInTime() > 1000) {
+                    holder.setText(R.id.signInTime, simpleDateFormat.format(obj.getSignInTime()));
+                } else {
+                    holder.setText(R.id.signInTime, "");
+                }
+                if (obj.getSignOutTime() > 1000) {
+                    holder.setText(R.id.signOutTime, simpleDateFormat.format(obj.getSignOutTime()));
+                } else {
+                    holder.setText(R.id.signOutTime, "");
+                }
             }
         };
         attendanceList.setAdapter(reusableAdapter);
