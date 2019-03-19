@@ -3,7 +3,6 @@ package com.lzf.attendancesystem.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -29,7 +28,7 @@ public class AttendanceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance);
 
-        Log.v("today", today + "");
+        //        Log.v("today", today + "");
 
         ListView signInList = findViewById(R.id.signInList);
         signInAdapter = new ReusableAdapter<Attendance>(attendanceDao.queryBuilder().where(AttendanceDao.Properties.SignInTime.gt(today)).orderDesc(AttendanceDao.Properties.SignInTime).list(), R.layout.item_sign) {

@@ -6,7 +6,6 @@ import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -74,21 +73,21 @@ public class SignInActivity extends AppCompatActivity {
                             FaceFeature compareFaceFeature = new FaceFeature();
                             compareFaceFeature.setFeatureData(staff.getStaffFaceOneFeatureData());
                             if (ZffApplication.getFaceEngine().compareFaceFeature(currentFaceFeature, compareFaceFeature, faceSimilar) == ErrorInfo.MOK) {
-                                Log.v("faceSimilar.getScore()", faceSimilar.getScore() + "");
+                                //                                Log.v("faceSimilar.getScore()", faceSimilar.getScore() + "");
                                 if (faceSimilar.getScore() >= 0.65f) { //签到成功
                                     signInSuccess(staff);
                                 }
                             }
                             compareFaceFeature.setFeatureData(staff.getStaffFaceTwoFeatureData());
                             if (ZffApplication.getFaceEngine().compareFaceFeature(currentFaceFeature, compareFaceFeature, faceSimilar) == ErrorInfo.MOK) {
-                                Log.v("faceSimilar.getScore()", faceSimilar.getScore() + "");
+                                //                                Log.v("faceSimilar.getScore()", faceSimilar.getScore() + "");
                                 if (faceSimilar.getScore() > 0.65f) { //签到成功
                                     signInSuccess(staff);
                                 }
                             }
                             compareFaceFeature.setFeatureData(staff.getStaffFaceThreeFeatureData());
                             if (ZffApplication.getFaceEngine().compareFaceFeature(currentFaceFeature, compareFaceFeature, faceSimilar) == ErrorInfo.MOK) {
-                                Log.v("faceSimilar.getScore()", faceSimilar.getScore() + "");
+                                //                                Log.v("faceSimilar.getScore()", faceSimilar.getScore() + "");
                                 if (faceSimilar.getScore() > 0.65f) { //签到成功
                                     signInSuccess(staff);
                                 }
@@ -326,7 +325,7 @@ public class SignInActivity extends AppCompatActivity {
      */
     private boolean faceEngineIsInit() {
         int faceEngineInit = ZffApplication.getFaceEngine().init(this, FaceEngine.ASF_DETECT_MODE_VIDEO, FaceEngine.ASF_OP_0_HIGHER_EXT, 10, 1, FaceEngine.ASF_NONE | FaceEngine.ASF_FACE_DETECT | FaceEngine.ASF_FACE_RECOGNITION | FaceEngine.ASF_AGE | FaceEngine.ASF_GENDER | FaceEngine.ASF_FACE3DANGLE | FaceEngine.ASF_LIVENESS);
-        Log.v("faceEngineInit", faceEngineInit + "");
+        //        Log.v("faceEngineInit", faceEngineInit + "");
         return faceEngineInit == ErrorInfo.MOK;
     }
 

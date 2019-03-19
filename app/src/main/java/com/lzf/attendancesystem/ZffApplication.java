@@ -3,7 +3,6 @@ package com.lzf.attendancesystem;
 import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.arcsoft.face.FaceEngine;
 import com.lzf.attendancesystem.bean.Admin;
@@ -50,25 +49,25 @@ public class ZffApplication extends Application {
                         DaoMaster.OpenHelper helper = new DaoMaster.OpenHelper(context, "ATTENDANCE_SYSTEM_DATABASE.db", null) {
                             @Override
                             public void onCreate(Database db) {
-                                Log.v("Database", "Creating tables for schema version " + DaoMaster.SCHEMA_VERSION);
+                                //                                Log.v("Database", "Creating tables for schema version " + DaoMaster.SCHEMA_VERSION);
                                 super.onCreate(db);
                             }
 
                             @Override
                             public void onCreate(SQLiteDatabase db) {
-                                Log.v("SQLiteDatabase", "Creating tables for schema version " + DaoMaster.SCHEMA_VERSION);
+                                //                                Log.v("SQLiteDatabase", "Creating tables for schema version " + DaoMaster.SCHEMA_VERSION);
                                 super.onCreate(db);
                             }
 
                             @Override
                             public void onUpgrade(Database db, int oldVersion, int newVersion) {
-                                Log.v("Database", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
+                                //                                Log.v("Database", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
                                 super.onUpgrade(db, oldVersion, newVersion);
                             }
 
                             @Override
                             public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-                                Log.v("SQLiteDatabase", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
+                                //                                Log.v("SQLiteDatabase", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
                                 super.onUpgrade(db, oldVersion, newVersion);
                             }
                         };

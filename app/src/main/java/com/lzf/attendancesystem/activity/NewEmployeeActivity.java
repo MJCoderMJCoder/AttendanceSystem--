@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -237,12 +236,12 @@ public class NewEmployeeActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.v("onActivityResult", "requestCode：" + requestCode + "；resultCode" + resultCode + "；data" + data);
+        //        Log.v("onActivityResult", "requestCode：" + requestCode + "；resultCode" + resultCode + "；data" + data);
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case CAMERA_REQUEST_CODE:
                     //部分机型（vivo v3）返回时会清除currentImageFile所占的内存空间。（重新走MyApplication导致）
-                    Log.v("拍照返回", getCurrentFile(null) + "");
+                    //                    Log.v("拍照返回", getCurrentFile(null) + "");
                     break;
                 case IMAGE_REQUEST_CODE:
                     Uri selectedImage = data.getData(); // 获取系统返回的照片的Uri
@@ -373,7 +372,7 @@ public class NewEmployeeActivity extends AppCompatActivity {
      */
     private boolean faceEngineIsInit() {
         int faceEngineInit = ZffApplication.getFaceEngine().init(this, FaceEngine.ASF_DETECT_MODE_IMAGE, FaceEngine.ASF_OP_0_HIGHER_EXT, 10, 1, FaceEngine.ASF_NONE | FaceEngine.ASF_FACE_DETECT | FaceEngine.ASF_FACE_RECOGNITION | FaceEngine.ASF_AGE | FaceEngine.ASF_GENDER | FaceEngine.ASF_FACE3DANGLE | FaceEngine.ASF_LIVENESS);
-        Log.v("faceEngineInit", faceEngineInit + "");
+        //        Log.v("faceEngineInit", faceEngineInit + "");
         return faceEngineInit == ErrorInfo.MOK;
     }
 
