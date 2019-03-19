@@ -6,6 +6,7 @@ import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -38,7 +39,9 @@ import java.util.TimeZone;
 public class SignInActivity extends AppCompatActivity {
     private int currentCameraID; //当前摄像头ID
     private int frontCameraId; //前置摄像头ID
+    private int frontCameraDegrees; //前置摄像头要旋转的度数
     private int backCameraId; //后置摄像头ID
+    private int backCameraDegrees; //后置摄像头要旋转的度数
     private Camera camera; //照相机（硬件）对象
     private MediaRecorder mediaRecorder; //录制视频
     private SurfaceView surfaceView; //预览视图
@@ -183,19 +186,53 @@ public class SignInActivity extends AppCompatActivity {
                     Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
                     for (int cameraIndex = 0; cameraIndex < Camera.getNumberOfCameras(); cameraIndex++) {
                         Camera.getCameraInfo(cameraIndex, cameraInfo);
+                        int rotation = SignInActivity.this.getWindowManager().getDefaultDisplay().getRotation();
                         if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
                             frontCameraId = cameraIndex;
+                            int degrees = 0;
+                            switch (rotation) {
+                                case Surface.ROTATION_0:
+                                    degrees = 0;
+                                    break;
+                                case Surface.ROTATION_90:
+                                    degrees = 90;
+                                    break;
+                                case Surface.ROTATION_180:
+                                    degrees = 180;
+                                    break;
+                                case Surface.ROTATION_270:
+                                    degrees = 270;
+                                    break;
+                            }
+                            frontCameraDegrees = (cameraInfo.orientation + degrees) % 360;
+                            frontCameraDegrees = (360 - frontCameraDegrees) % 360;  // compensate the mirror
                             //                            camera = Camera.open(frontCameraId); //前置摄像头
                             //                            camera.setDisplayOrientation(270);   //让相机旋转270度
                         } else if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
                             backCameraId = cameraIndex;
+                            int degrees = 0;
+                            switch (rotation) {
+                                case Surface.ROTATION_0:
+                                    degrees = 0;
+                                    break;
+                                case Surface.ROTATION_90:
+                                    degrees = 90;
+                                    break;
+                                case Surface.ROTATION_180:
+                                    degrees = 180;
+                                    break;
+                                case Surface.ROTATION_270:
+                                    degrees = 270;
+                                    break;
+                            }
+                            backCameraDegrees = (cameraInfo.orientation - degrees + 360) % 360;
                             //                            camera = Camera.open(backCameraId); //后置摄像头
                             //                            camera.setDisplayOrientation(90);   //让相机旋转90度
                         }
                     }
                     currentCameraID = backCameraId;
                     camera = Camera.open(currentCameraID);
-                    camera.setDisplayOrientation(90);   //让相机旋转90度
+                    camera.setDisplayOrientation(backCameraDegrees);   //让相机旋转90度
                 }
                 camera.setPreviewDisplay(surfaceView.getHolder());
                 camera.setPreviewCallback(previewCallback);
@@ -283,14 +320,14 @@ public class SignInActivity extends AppCompatActivity {
                     if (currentCameraID == frontCameraId) {
                         currentCameraID = backCameraId;
                         camera = Camera.open(currentCameraID);
-                        camera.setDisplayOrientation(90);   //让相机旋转90度
+                        camera.setDisplayOrientation(backCameraDegrees);   //让相机旋转一定度数
                         camera.setPreviewDisplay(surfaceView.getHolder());
                         camera.setPreviewCallback(previewCallback);
                         camera.startPreview();
                     } else if (currentCameraID == backCameraId) {
                         currentCameraID = frontCameraId;
                         camera = Camera.open(currentCameraID);
-                        camera.setDisplayOrientation(270);   //让相机旋转270度
+                        camera.setDisplayOrientation(frontCameraDegrees);   //让相机旋转一定度数
                         camera.setPreviewDisplay(surfaceView.getHolder());
                         camera.setPreviewCallback(previewCallback);
                         camera.startPreview();
@@ -380,5 +417,24 @@ public class SignInActivity extends AppCompatActivity {
         super.onDestroy();
         //调用FaceEngine的unInit方法销毁引擎。在init成功后如不unInit会导致内存泄漏。
         ZffApplication.getFaceEngine().unInit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        try {
+            if (camera != null) {
+                //                camera.lock(); //从Android 4.0 (API 14)开始, Camera.lock() 和 Camera.unlock() 的调用已经被自动管理了。
+                camera.setPreviewCallback(null);
+                camera.setPreviewDisplay(null);
+                camera.stopPreview();
+                camera.release();
+                camera = null;
+            }
+            //调用FaceEngine的unInit方法销毁引擎。在init成功后如不unInit会导致内存泄漏。
+            ZffApplication.getFaceEngine().unInit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
