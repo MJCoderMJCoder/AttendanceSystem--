@@ -19,3 +19,26 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+##---------------Begin: proguard configuration for greenDAO 3  ----------
+-keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
+    public static java.lang.String TABLENAME;
+}
+-keep class **$Properties
+# If you do not use SQLCipher:
+-dontwarn org.greenrobot.greendao.database.**
+# If you do not use RxJava:
+-dontwarn rx.**
+##---------------End: proguard configuration for greenDAO 3  ----------
+
+##---------------Begin: proguard configuration for Glide  ----------
+#ProGuard：Depending on your ProGuard (DexGuard) config and usage, you may need to include the following lines in your proguard.cfg (see the Download and Setup docs page for more details):
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+# for DexGuard only
+#-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
+##---------------End: proguard configuration for Glide  ----------
