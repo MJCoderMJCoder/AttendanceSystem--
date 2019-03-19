@@ -20,6 +20,16 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+##---------------Begin: proguard configuration for MJCoder  ----------
+#保持 native 方法不被混淆：JNI方法不可混淆，因为这个方法需要和native方法保持一致；
+#JNI 调用 Java 方法，需要通过类名和方法名构成的地址形成。
+#Java 使用 Native 方法，Native 是C/C++编写的，方法是无法一同混淆的。
+-keepclasseswithmembernames class * {
+   native <methods>;
+}
+-keep class com.arcsoft.face.** {*;}
+##---------------End: proguard configuration for MJCoder  ----------
+
 ##---------------Begin: proguard configuration for greenDAO 3  ----------
 -keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
     public static java.lang.String TABLENAME;
