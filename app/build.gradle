@@ -10,31 +10,36 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        externalNativeBuild {
-            cmake {
-                cppFlags "-frtti -fexceptions"
-            }
-        }
+//        externalNativeBuild {
+//            cmake {
+//                cppFlags "-frtti -fexceptions"
+//            }
+//        }
     }
     buildTypes {
         release {
-            minifyEnabled false
+            buildConfigField "boolean", "LOG_DEBUG", "false"  // 不显示Log
+            minifyEnabled true //是否启动混淆 ture:打开   false:关闭
+            zipAlignEnabled true   //ZipAlign优化
+            shrinkResources true  // 资源压缩：移除无用的resource文件
+            //前一部分代表系统默认的android程序的混淆文件，该文件已经包含了基本的混淆声明，后一个文件是自己的定义混淆文件
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    externalNativeBuild {
-        cmake {
-            path "CMakeLists.txt"
-        }
-    }
-    splits {
-        abi {
-            enable true
-            reset()
-            include 'x86', 'x86_64', 'armeabi-v7a', 'armeabi'
-            universalApk false
-        }
-    }
+//    externalNativeBuild {
+//        cmake {
+//            path "CMakeLists.txt"
+//        }
+//    }
+
+//    splits {
+//        abi {
+//            enable true
+//            reset()
+//            include 'x86', 'x86_64', 'armeabi-v7a', 'armeabi'
+//            universalApk false
+//        }
+//    }
 }
 
 greendao {
