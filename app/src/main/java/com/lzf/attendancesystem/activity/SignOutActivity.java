@@ -2,10 +2,10 @@ package com.lzf.attendancesystem.activity;
 
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -416,11 +416,38 @@ public class SignOutActivity extends AppCompatActivity {
         }
     }
 
-    private void signOutSuccessUI(Attendance attendance, String result) {
+    private void signOutSuccessUI(final Attendance attendance, final String result) {
         //        if (!"".equals(age.getText().toString()) && !"".equals(gender.getText().toString()) && !"".equals(liveness.getText().toString())) {
-        signOutSuccess.setVisibility(View.VISIBLE);
+        //        signOutSuccess.setVisibility(View.VISIBLE);
         //            工号……姓名……时间……签到类型
-        Snackbar.make(liveness, "\n\t\t" + result + "\n\n工号：" + attendance.getStaffId() + "；姓名：" + attendance.getStaffName() + "；下班签退时间：" + simpleDateFormat.format(attendance.getSignOutTime()) + "\n", Snackbar.LENGTH_LONG).show();
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            liveness.setBackgroundColor(Color.BLACK);
+                            liveness.setTextColor(Color.WHITE);
+                            liveness.setText("\n\t\t\t\t\t\t" + result + "\n\n\t\t工号：" + attendance.getStaffId() + "；姓名：" + attendance.getStaffName() + "；\n\n\t\t下班签退时间：" + simpleDateFormat.format(attendance.getSignOutTime()) + "\t\t\n");
+                        }
+                    });
+                    Thread.sleep(1500);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            liveness.setBackgroundColor(getResources().getColor(R.color.zffLucency));
+                            liveness.setTextColor(getResources().getColor(R.color.zffSuccess));
+                            liveness.setText("");
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+
         //        }
     }
 
