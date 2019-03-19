@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -32,6 +33,7 @@ import com.lzf.attendancesystem.bean.StaffDao;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
@@ -54,7 +56,7 @@ public class SignOutActivity extends AppCompatActivity {
 
     private AttendanceDao attendanceDao = ZffApplication.getDaoSession(this).getAttendanceDao();
     private long today = System.currentTimeMillis() / (1000 * 3600 * 24) * (1000 * 3600 * 24) - TimeZone.getDefault().getRawOffset();//今天零点零分零秒的毫秒数
-
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
     private Camera.PreviewCallback previewCallback = new Camera.PreviewCallback() {
         @Override
         public void onPreviewFrame(byte[] data, Camera camera) {
@@ -108,7 +110,8 @@ public class SignOutActivity extends AppCompatActivity {
                             if (ageInfo.getAge() == AgeInfo.UNKNOWN_AGE) {
                                 age.setText("");
                             } else {
-                                age.setText(ageInfo.getAge() + "岁");
+                                //                                age.setText(ageInfo.getAge() + "岁");
+                                age.setText("");
                             }
                         }
                     }
@@ -117,43 +120,45 @@ public class SignOutActivity extends AppCompatActivity {
                     if (faceEndineGender == ErrorInfo.MOK) {
                         for (GenderInfo genderInfo : genderInfos) {
                             if (genderInfo.getGender() == GenderInfo.FEMALE) {
-                                if (ageValue < 11) {
-                                    gender.setText("小可爱");
-                                } else if (ageValue >= 11 && ageValue < 15) {
-                                    gender.setText("豆蔻年华");
-                                } else if (ageValue >= 15 && ageValue < 25) {
-                                    gender.setText("美少女");
-                                } else if (ageValue >= 25 && ageValue < 30) {
-                                    gender.setText("花房姑娘");
-                                } else if (ageValue >= 30 && ageValue < 35) {
-                                    gender.setText("仙女");
-                                } else if (ageValue >= 35 && ageValue < 45) {
-                                    gender.setText("御姐"); //半老徐娘
-                                } else if (ageValue >= 45 && ageValue < 60) {
-                                    gender.setText("阿姨，求介绍对象！");
-                                } else if (ageValue >= 60) {
-                                    gender.setText("奶奶，你保养的真好，简直就是鹤发童颜啊！");
-                                }
+                                //                                if (ageValue < 11) {
+                                //                                    gender.setText("小可爱");
+                                //                                } else if (ageValue >= 11 && ageValue < 15) {
+                                //                                    gender.setText("豆蔻年华");
+                                //                                } else if (ageValue >= 15 && ageValue < 25) {
+                                //                                    gender.setText("美少女");
+                                //                                } else if (ageValue >= 25 && ageValue < 30) {
+                                //                                    gender.setText("花房姑娘");
+                                //                                } else if (ageValue >= 30 && ageValue < 35) {
+                                //                                    gender.setText("仙女");
+                                //                                } else if (ageValue >= 35 && ageValue < 45) {
+                                //                                    gender.setText("御姐"); //半老徐娘
+                                //                                } else if (ageValue >= 45 && ageValue < 60) {
+                                //                                    gender.setText("阿姨，求介绍对象！");
+                                //                                } else if (ageValue >= 60) {
+                                //                                    gender.setText("奶奶，你保养的真好，简直就是鹤发童颜啊！");
+                                //                                }
+                                gender.setText("");
                             } else if (genderInfo.getGender() == GenderInfo.MALE) {
-                                if (ageValue < 11) {
-                                    gender.setText("少年");
-                                } else if (ageValue >= 11 && ageValue < 15) {
-                                    gender.setText("帅小伙");
-                                } else if (ageValue >= 15 && ageValue < 25) {
-                                    gender.setText("小鲜肉！");
-                                } else if (ageValue >= 25 && ageValue < 30) {
-                                    gender.setText("哇！帅哥！");
-                                } else if (ageValue >= 30 && ageValue < 40) {
-                                    gender.setText("三十而立，四十不惑。");
-                                } else if (ageValue >= 40 && ageValue < 45) {
-                                    gender.setText("身体困了吧？大叔！"); //半老徐娘
-                                } else if (ageValue >= 45 && ageValue < 60) {
-                                    gender.setText("知天命，入花甲。");
-                                } else if (ageValue >= 60 && ageValue < 75) {
-                                    gender.setText("爷爷，一看你就是老而益壮！");
-                                } else if (ageValue >= 75) {
-                                    gender.setText("爷爷，你是否已饱经风霜？"); //饱经风霜//老气横秋//老而益壮
-                                }
+                                //                                if (ageValue < 11) {
+                                //                                    gender.setText("少年");
+                                //                                } else if (ageValue >= 11 && ageValue < 15) {
+                                //                                    gender.setText("帅小伙");
+                                //                                } else if (ageValue >= 15 && ageValue < 25) {
+                                //                                    gender.setText("小鲜肉！");
+                                //                                } else if (ageValue >= 25 && ageValue < 30) {
+                                //                                    gender.setText("哇！帅哥！");
+                                //                                } else if (ageValue >= 30 && ageValue < 40) {
+                                //                                    gender.setText("三十而立，四十不惑。");
+                                //                                } else if (ageValue >= 40 && ageValue < 45) {
+                                //                                    gender.setText("身体困了吧？大叔！"); //半老徐娘
+                                //                                } else if (ageValue >= 45 && ageValue < 60) {
+                                //                                    gender.setText("知天命，入花甲。");
+                                //                                } else if (ageValue >= 60 && ageValue < 75) {
+                                //                                    gender.setText("爷爷，一看你就是老而益壮！");
+                                //                                } else if (ageValue >= 75) {
+                                //                                    gender.setText("爷爷，你是否已饱经风霜？"); //饱经风霜//老气横秋//老而益壮
+                                //                                }
+                                gender.setText("");
                             } else {
                                 gender.setText("");
                             }
@@ -164,9 +169,11 @@ public class SignOutActivity extends AppCompatActivity {
                     if (faceEndineLiveness == ErrorInfo.MOK) {
                         for (LivenessInfo livenessInfo : livenessInfos) {
                             if (livenessInfo.getLiveness() == LivenessInfo.ALIVE) {
-                                liveness.setText("嗯，一看你就是能量慢慢，充满活力。");
+                                //                                liveness.setText("嗯，一看你就是能量慢慢，充满活力。");
+                                liveness.setText("");
                             } else if (livenessInfo.getLiveness() == LivenessInfo.NOT_ALIVE) {
-                                liveness.setText("一动不动是王八！");
+                                //                                liveness.setText("一动不动是王八！");
+                                liveness.setText("照片不能代替人脸来签到哦！");
                             } else if (livenessInfo.getLiveness() == LivenessInfo.FACE_NUM_MORE_THAN_ONE) {
                                 liveness.setText("这么多人，一个一个来好吗？");
                             } else {
@@ -371,47 +378,50 @@ public class SignOutActivity extends AppCompatActivity {
 
     private synchronized void signOutSuccess(Staff staff) {
         try {
-            QueryBuilder<Attendance> queryBuilder = attendanceDao.queryBuilder();
-            queryBuilder.where(AttendanceDao.Properties.StaffId.eq(staff.getStaffId()), AttendanceDao.Properties.StaffName.eq(staff.getStaffName()), AttendanceDao.Properties.StaffDepartment.eq(staff.getStaffDepartment()), queryBuilder.or(AttendanceDao.Properties.SignInTime.gt(today), AttendanceDao.Properties.SignOutTime.gt(today)));
-            List<Attendance> attendances = queryBuilder.list();
-            if (attendances != null && attendances.size() > 0) {
-                Attendance attendance = attendances.get(0);
-                attendance.setSignOutTime(System.currentTimeMillis());
-                attendanceDao.update(attendance);
-            } else {
-                Cursor cursor = null;
-                long attendanceId = 0;
-                try {
-                    cursor = ZffApplication.getDaoSession(this).getDatabase().rawQuery("select max(ATTENDANCE_ID) MAX_ATTENDANCE_ID from ATTENDANCE", null);
-                    while (cursor.moveToNext()) {
-                        attendanceId = cursor.getLong(cursor.getColumnIndex("MAX_ATTENDANCE_ID")) + 1;
+            if ("".equals(liveness.getText().toString().trim())) {
+                QueryBuilder<Attendance> queryBuilder = attendanceDao.queryBuilder();
+                queryBuilder.where(AttendanceDao.Properties.StaffId.eq(staff.getStaffId()), AttendanceDao.Properties.StaffName.eq(staff.getStaffName()), AttendanceDao.Properties.StaffDepartment.eq(staff.getStaffDepartment()), queryBuilder.or(AttendanceDao.Properties.SignInTime.gt(today), AttendanceDao.Properties.SignOutTime.gt(today)));
+                List<Attendance> attendances = queryBuilder.list();
+                if (attendances != null && attendances.size() > 0) {
+                    Attendance attendance = attendances.get(0);
+                    if (attendances.get(0).getSignOutTime() > 1000) {
+                        signOutSuccessUI(attendance, "你已经签退过了");
+                    } else {
+                        attendance.setSignOutTime(System.currentTimeMillis());
+                        attendanceDao.update(attendance);
+                        signOutSuccessUI(attendance, "恭喜你，下班签退成功。");
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if (cursor != null) {
-                        cursor.close();
+                } else {
+                    Cursor cursor = null;
+                    long attendanceId = 0;
+                    try {
+                        cursor = ZffApplication.getDaoSession(this).getDatabase().rawQuery("select max(ATTENDANCE_ID) MAX_ATTENDANCE_ID from ATTENDANCE", null);
+                        while (cursor.moveToNext()) {
+                            attendanceId = cursor.getLong(cursor.getColumnIndex("MAX_ATTENDANCE_ID")) + 1;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (cursor != null) {
+                            cursor.close();
+                        }
                     }
+                    Attendance attendance = new Attendance(attendanceId, staff.getStaffId(), staff.getStaffName(), staff.getStaffDepartment(), 0L, System.currentTimeMillis());
+                    attendanceDao.insert(attendance);
+                    signOutSuccessUI(attendance, "恭喜你，下班签退成功。");
                 }
-                attendanceDao.insert(new Attendance(attendanceId, staff.getStaffId(), staff.getStaffName(), staff.getStaffDepartment(), 0L, System.currentTimeMillis()));
-            }
-            if (!"".equals(age.getText().toString()) && !"".equals(gender.getText().toString()) && !"".equals(liveness.getText().toString())) {
-                signOutSuccess.setVisibility(View.VISIBLE);
-                if (camera != null) {
-                    //                camera.lock(); //从Android 4.0 (API 14)开始, Camera.lock() 和 Camera.unlock() 的调用已经被自动管理了。
-                    camera.setPreviewCallback(null);
-                    camera.setPreviewDisplay(null);
-                    camera.stopPreview();
-                    camera.release();
-                    camera = null;
-                }
-                //调用FaceEngine的unInit方法销毁引擎。在init成功后如不unInit会导致内存泄漏。
-                ZffApplication.getFaceEngine().unInit();
-                finish();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void signOutSuccessUI(Attendance attendance, String result) {
+        //        if (!"".equals(age.getText().toString()) && !"".equals(gender.getText().toString()) && !"".equals(liveness.getText().toString())) {
+        signOutSuccess.setVisibility(View.VISIBLE);
+        //            工号……姓名……时间……签到类型
+        Snackbar.make(liveness, "\n\t\t" + result + "\n\n工号：" + attendance.getStaffId() + "；姓名：" + attendance.getStaffName() + "；下班签退时间：" + simpleDateFormat.format(attendance.getSignOutTime()) + "\n", Snackbar.LENGTH_LONG).show();
+        //        }
     }
 
     @Override
@@ -435,6 +445,7 @@ public class SignOutActivity extends AppCompatActivity {
             }
             //调用FaceEngine的unInit方法销毁引擎。在init成功后如不unInit会导致内存泄漏。
             ZffApplication.getFaceEngine().unInit();
+            finish();
         } catch (Exception e) {
             e.printStackTrace();
         }

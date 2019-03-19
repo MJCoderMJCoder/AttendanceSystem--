@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.arcsoft.face.ErrorInfo;
 import com.arcsoft.face.FaceEngine;
 import com.lzf.attendancesystem.bean.Admin;
 import com.lzf.attendancesystem.bean.DaoMaster;
@@ -86,7 +87,9 @@ public class ZffApplication extends Application {
     public void onCreate() {
         super.onCreate();
         //激活设备，一个设备安装后仅需激活一次，卸载重新安装后需要重新激活。
-        getFaceEngine().active(this, "GMZPhEArrLoVVb8gtJ1KydUPRdgK4JkZVXh77WKvGFQD", "2EUD77P6jAr2TpAU372yd26ASB18pEZbeRFnPCsPFZTN");
+        if (ErrorInfo.MOK != getFaceEngine().active(this, "GMZPhEArrLoVVb8gtJ1KydUPRdgK4JkZVXh77WKvGFQD", "2EUD77P6jAr2TpAU372yd26ASB18pEZbeRFnPCsPFZTN")) {
+            getFaceEngine().active(this, "GMZPhEArrLoVVb8gtJ1KydUPRdgK4JkZVXh77WKvGFQD", "2EUD77P6jAr2TpAU372yd26ASB18pEZbeRFnPCsPFZTN");
+        }
         getDaoSession(this);
     }
 }

@@ -11,7 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.arcsoft.face.ErrorInfo;
 import com.lzf.attendancesystem.R;
+import com.lzf.attendancesystem.ZffApplication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,18 @@ public class MainActivity extends AppCompatActivity {
 
         //        Log.v(stringFromJNI(), stringFromJNI());
         permissionIsGranted();
+
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                int temp = ZffApplication.getFaceEngine().active(MainActivity.this, "GMZPhEArrLoVVb8gtJ1KydUPRdgK4JkZVXh77WKvGFQD", "2EUD77P6jAr2TpAU372yd26ASB18pEZbeRFnPCsPFZTN");
+                //激活设备，一个设备安装后仅需激活一次，卸载重新安装后需要重新激活。
+                while (ErrorInfo.MOK != temp) {
+                    temp = ZffApplication.getFaceEngine().active(MainActivity.this, "GMZPhEArrLoVVb8gtJ1KydUPRdgK4JkZVXh77WKvGFQD", "2EUD77P6jAr2TpAU372yd26ASB18pEZbeRFnPCsPFZTN");
+                }
+            }
+        }.start();
     }
 
     public void onClick(View view) {
