@@ -2,7 +2,6 @@ package com.lzf.attendancesystem.activity;
 
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -13,6 +12,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +52,11 @@ public class SignInActivity extends AppCompatActivity {
     private TextView gender;
     private TextView liveness;
     private ImageView signInSuccess;
+    private LinearLayout signInSuccessLinear;
+    private TextView staffId;
+    private TextView staffName;
+    private TextView signInTime;
+    private TextView signInSuccessT;
     private List<Staff> staffList = ZffApplication.getDaoSession(this).getStaffDao().queryBuilder().orderAsc(StaffDao.Properties.StaffId).list();
 
     private AttendanceDao attendanceDao = ZffApplication.getDaoSession(this).getAttendanceDao();
@@ -303,6 +308,11 @@ public class SignInActivity extends AppCompatActivity {
             surfaceView = findViewById(R.id.surfaceView);
             surfaceView.getHolder().addCallback(surfaceHolderCallback);
             signInSuccess = findViewById(R.id.signInSuccess);
+            signInSuccessLinear = findViewById(R.id.signInSuccessLinear);
+            staffId = findViewById(R.id.staffId);
+            staffName = findViewById(R.id.staffName);
+            signInTime = findViewById(R.id.signInTime);
+            signInSuccessT = findViewById(R.id.signInSuccessT);
         } else {
             Toast.makeText(this, "抱歉，摄像头不可用", Toast.LENGTH_SHORT).show();
             finish();
@@ -376,7 +386,7 @@ public class SignInActivity extends AppCompatActivity {
 
     private synchronized void signInSuccess(Staff staff) {
         try {
-            if ("".equals(liveness.getText().toString().trim())) {
+//            if ("".equals(liveness.getText().toString().trim())) {
                 QueryBuilder<Attendance> queryBuilder = attendanceDao.queryBuilder();
                 queryBuilder.where(AttendanceDao.Properties.StaffId.eq(staff.getStaffId()), AttendanceDao.Properties.StaffName.eq(staff.getStaffName()), AttendanceDao.Properties.StaffDepartment.eq(staff.getStaffDepartment()), queryBuilder.or(AttendanceDao.Properties.SignInTime.gt(today), AttendanceDao.Properties.SignOutTime.gt(today)));
                 List<Attendance> attendances = queryBuilder.list();
@@ -408,7 +418,7 @@ public class SignInActivity extends AppCompatActivity {
                     attendanceDao.insert(attendance);
                     signInSuccessUI(attendance, "恭喜你，上班签到成功。");
                 }
-            }
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -418,6 +428,10 @@ public class SignInActivity extends AppCompatActivity {
         //        if (!"".equals(age.getText().toString()) && !"".equals(gender.getText().toString()) && !"".equals(liveness.getText().toString())) {
         //        signInSuccess.setVisibility(View.VISIBLE);
         //            工号……姓名……时间……签到类型
+        signInSuccessT.setText(result);
+        staffId.setText(attendance.getStaffId() + "");
+        staffName.setText(attendance.getStaffName());
+        signInTime.setText(simpleDateFormat.format(attendance.getSignInTime()));
         new Thread() {
             @Override
             public void run() {
@@ -426,18 +440,14 @@ public class SignInActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            liveness.setBackgroundColor(Color.BLACK);
-                            liveness.setTextColor(Color.WHITE);
-                            liveness.setText("\n\t\t\t\t\t\t" + result + "\n\n\t\t工号：" + attendance.getStaffId() + "；姓名：" + attendance.getStaffName() + "；\n\n\t\t上班签到时间：" + simpleDateFormat.format(attendance.getSignInTime()) + "\t\t\n");
+                            signInSuccessLinear.setVisibility(View.VISIBLE);
                         }
                     });
-                    Thread.sleep(1500);
+                    Thread.sleep(2000);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            liveness.setBackgroundColor(getResources().getColor(R.color.zffLucency));
-                            liveness.setTextColor(getResources().getColor(R.color.zffSuccess));
-                            liveness.setText("");
+                            signInSuccessLinear.setVisibility(View.GONE);
                         }
                     });
                 } catch (Exception e) {
