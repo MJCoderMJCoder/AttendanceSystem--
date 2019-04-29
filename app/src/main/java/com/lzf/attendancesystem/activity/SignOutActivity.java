@@ -388,7 +388,7 @@ public class SignOutActivity extends AppCompatActivity {
 
     private synchronized void signOutSuccess(Staff staff) {
         try {
-//            if ("".equals(liveness.getText().toString().trim())) {
+            if ("".equals(liveness.getText().toString().trim())) {
                 QueryBuilder<Attendance> queryBuilder = attendanceDao.queryBuilder();
                 queryBuilder.where(AttendanceDao.Properties.StaffId.eq(staff.getStaffId()), AttendanceDao.Properties.StaffName.eq(staff.getStaffName()), AttendanceDao.Properties.StaffDepartment.eq(staff.getStaffDepartment()), queryBuilder.or(AttendanceDao.Properties.SignInTime.gt(today), AttendanceDao.Properties.SignOutTime.gt(today)));
                 List<Attendance> attendances = queryBuilder.list();
@@ -420,7 +420,7 @@ public class SignOutActivity extends AppCompatActivity {
                     attendanceDao.insert(attendance);
                     signOutSuccessUI(attendance, "恭喜你，下班签退成功。");
                 }
-//            }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

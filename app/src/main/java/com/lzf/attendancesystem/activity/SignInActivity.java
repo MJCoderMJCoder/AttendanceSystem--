@@ -386,7 +386,7 @@ public class SignInActivity extends AppCompatActivity {
 
     private synchronized void signInSuccess(Staff staff) {
         try {
-//            if ("".equals(liveness.getText().toString().trim())) {
+            if ("".equals(liveness.getText().toString().trim())) {
                 QueryBuilder<Attendance> queryBuilder = attendanceDao.queryBuilder();
                 queryBuilder.where(AttendanceDao.Properties.StaffId.eq(staff.getStaffId()), AttendanceDao.Properties.StaffName.eq(staff.getStaffName()), AttendanceDao.Properties.StaffDepartment.eq(staff.getStaffDepartment()), queryBuilder.or(AttendanceDao.Properties.SignInTime.gt(today), AttendanceDao.Properties.SignOutTime.gt(today)));
                 List<Attendance> attendances = queryBuilder.list();
@@ -418,7 +418,7 @@ public class SignInActivity extends AppCompatActivity {
                     attendanceDao.insert(attendance);
                     signInSuccessUI(attendance, "恭喜你，上班签到成功。");
                 }
-//            }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
