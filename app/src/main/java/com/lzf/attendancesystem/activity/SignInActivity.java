@@ -115,8 +115,9 @@ public class SignInActivity extends AppCompatActivity {
                             ageValue = ageInfo.getAge();
                             if (ageInfo.getAge() == AgeInfo.UNKNOWN_AGE) {
                                 age.setText("");
+                            } else if (ageValue < 45) {
+                                age.setText(ageInfo.getAge() + "岁");
                             } else {
-                                //                                age.setText(ageInfo.getAge() + "岁");
                                 age.setText("");
                             }
                         }
@@ -126,45 +127,49 @@ public class SignInActivity extends AppCompatActivity {
                     if (faceEndineGender == ErrorInfo.MOK) {
                         for (GenderInfo genderInfo : genderInfos) {
                             if (genderInfo.getGender() == GenderInfo.FEMALE) {
-                                //                                if (ageValue < 11) {
-                                //                                    gender.setText("小可爱");
-                                //                                } else if (ageValue >= 11 && ageValue < 15) {
-                                //                                    gender.setText("豆蔻年华");
-                                //                                } else if (ageValue >= 15 && ageValue < 25) {
-                                //                                    gender.setText("美少女");
-                                //                                } else if (ageValue >= 25 && ageValue < 30) {
-                                //                                    gender.setText("花房姑娘");
-                                //                                } else if (ageValue >= 30 && ageValue < 35) {
-                                //                                    gender.setText("仙女");
-                                //                                } else if (ageValue >= 35 && ageValue < 45) {
-                                //                                    gender.setText("御姐"); //半老徐娘
-                                //                                } else if (ageValue >= 45 && ageValue < 60) {
+                                if (ageValue < 11) {
+                                    gender.setText("小可爱");
+                                } else if (ageValue >= 11 && ageValue < 15) {
+                                    gender.setText("豆蔻年华");
+                                } else if (ageValue >= 15 && ageValue < 25) {
+                                    gender.setText("美少女");
+                                } else if (ageValue >= 25 && ageValue < 30) {
+                                    gender.setText("花房姑娘");
+                                } else if (ageValue >= 30 && ageValue < 35) {
+                                    gender.setText("仙女");
+                                } else if (ageValue >= 35 && ageValue < 45) {
+                                    gender.setText("御姐"); //半老徐娘
+                                } else {
+                                    gender.setText("");
+                                }
+                                //                                else if (ageValue >= 45 && ageValue < 60) {
                                 //                                    gender.setText("阿姨，求介绍对象！");
                                 //                                } else if (ageValue >= 60) {
                                 //                                    gender.setText("奶奶，你保养的真好，简直就是鹤发童颜啊！");
                                 //                                }
-                                gender.setText("");
                             } else if (genderInfo.getGender() == GenderInfo.MALE) {
-                                //                                if (ageValue < 11) {
-                                //                                    gender.setText("少年");
-                                //                                } else if (ageValue >= 11 && ageValue < 15) {
-                                //                                    gender.setText("帅小伙");
-                                //                                } else if (ageValue >= 15 && ageValue < 25) {
-                                //                                    gender.setText("小鲜肉！");
-                                //                                } else if (ageValue >= 25 && ageValue < 30) {
-                                //                                    gender.setText("哇！帅哥！");
-                                //                                } else if (ageValue >= 30 && ageValue < 40) {
-                                //                                    gender.setText("三十而立，四十不惑。");
-                                //                                } else if (ageValue >= 40 && ageValue < 45) {
-                                //                                    gender.setText("身体困了吧？大叔！"); //半老徐娘
-                                //                                } else if (ageValue >= 45 && ageValue < 60) {
+                                if (ageValue < 11) {
+                                    gender.setText("少年");
+                                } else if (ageValue >= 11 && ageValue < 15) {
+                                    gender.setText("帅小伙");
+                                } else if (ageValue >= 15 && ageValue < 25) {
+                                    gender.setText("小鲜肉！");
+                                } else if (ageValue >= 25 && ageValue < 30) {
+                                    gender.setText("哇！帅哥！");
+                                } else if (ageValue >= 30 && ageValue < 40) {
+                                    gender.setText("三十而立，四十不惑。");
+                                } else if (ageValue >= 40 && ageValue < 45) {
+                                    gender.setText("身体困了吧？大叔！"); //半老徐娘
+                                } else {
+                                    gender.setText("");
+                                }
+                                //                                else if (ageValue >= 45 && ageValue < 60) {
                                 //                                    gender.setText("知天命，入花甲。");
                                 //                                } else if (ageValue >= 60 && ageValue < 75) {
                                 //                                    gender.setText("爷爷，一看你就是老而益壮！");
                                 //                                } else if (ageValue >= 75) {
                                 //                                    gender.setText("爷爷，你是否已饱经风霜？"); //饱经风霜//老气横秋//老而益壮
                                 //                                }
-                                gender.setText("");
                             } else {
                                 gender.setText("");
                             }
