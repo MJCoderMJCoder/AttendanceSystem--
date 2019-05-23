@@ -433,7 +433,7 @@ public class SignOutActivity extends AppCompatActivity {
         signOutSuccessT.setText(result);
         staffId.setText(attendance.getStaffId() + "");
         staffName.setText(attendance.getStaffName());
-        signOutTime.setText(simpleDateFormat.format(attendance.getSignInTime()));
+        signOutTime.setText(simpleDateFormat.format(attendance.getSignOutTime()));
         new Thread() {
             @Override
             public void run() {
