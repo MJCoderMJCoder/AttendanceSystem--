@@ -47,11 +47,11 @@ public class SignInActivity extends AppCompatActivity {
     private Camera camera; //照相机（硬件）对象
     private MediaRecorder mediaRecorder; //录制视频
     private SurfaceView surfaceView; //预览视图
-    private TextView age;
-    private int ageValue = 0;
-    private TextView gender;
-    private TextView liveness;
-    private String livenessInfo = "";
+    private TextView age; //年龄显示
+    private int ageValue = 0; //年龄检测结果
+    private TextView gender; //性别显示
+    private TextView liveness; //活体检测显示
+    private String livenessInfo = ""; //活体检测结果
     private ImageView signInSuccess;
     private LinearLayout signInSuccessLinear;
     private TextView staffId;
