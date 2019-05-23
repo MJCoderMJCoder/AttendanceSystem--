@@ -51,6 +51,7 @@ public class SignOutActivity extends AppCompatActivity {
     private int ageValue = 0;
     private TextView gender;
     private TextView liveness;
+    private String livenessInfo = "";
     private ImageView signOutSuccess;
     private LinearLayout signOutSuccessLinear;
     private TextView staffId;
@@ -172,16 +173,24 @@ public class SignOutActivity extends AppCompatActivity {
                     List<LivenessInfo> livenessInfos = new ArrayList<LivenessInfo>();
                     int faceEndineLiveness = ZffApplication.getFaceEngine().getLiveness(livenessInfos);
                     if (faceEndineLiveness == ErrorInfo.MOK) {
-                        for (LivenessInfo livenessInfo : livenessInfos) {
-                            if (livenessInfo.getLiveness() == LivenessInfo.ALIVE) {
+                        for (LivenessInfo livenessInfoTemp : livenessInfos) {
+                            if (livenessInfoTemp.getLiveness() == LivenessInfo.ALIVE) {
                                 //                                liveness.setText("嗯，一看你就是能量慢慢，充满活力。");
+                                livenessInfo = "ALIVE";
                                 liveness.setText("");
-                            } else if (livenessInfo.getLiveness() == LivenessInfo.NOT_ALIVE) {
+                            } else if (livenessInfoTemp.getLiveness() == LivenessInfo.NOT_ALIVE) {
                                 //                                liveness.setText("一动不动是王八！");
-                                liveness.setText("照片不能代替人脸来签到哦！");
-                            } else if (livenessInfo.getLiveness() == LivenessInfo.FACE_NUM_MORE_THAN_ONE) {
-                                liveness.setText("这么多人，一个一个来好吗？");
+                                if ("NOT_ALIVE".equals(livenessInfo)) {
+                                    liveness.setText("照片不能代替人脸来签到哦！");
+                                }
+                                livenessInfo = "NOT_ALIVE";
+                            } else if (livenessInfoTemp.getLiveness() == LivenessInfo.FACE_NUM_MORE_THAN_ONE) {
+                                if ("FACE_NUM_MORE_THAN_ONE".equals(livenessInfo)) {
+                                    liveness.setText("这么多人，一个一个来好吗？");
+                                }
+                                livenessInfo = "FACE_NUM_MORE_THAN_ONE";
                             } else {
+                                livenessInfo = "UNKNOW";
                                 liveness.setText("");
                             }
                         }
@@ -388,7 +397,7 @@ public class SignOutActivity extends AppCompatActivity {
 
     private synchronized void signOutSuccess(Staff staff) {
         try {
-            if ("".equals(liveness.getText().toString().trim())) {
+            if ("ALIVE".equals(livenessInfo)) {
                 QueryBuilder<Attendance> queryBuilder = attendanceDao.queryBuilder();
                 queryBuilder.where(AttendanceDao.Properties.StaffId.eq(staff.getStaffId()), AttendanceDao.Properties.StaffName.eq(staff.getStaffName()), AttendanceDao.Properties.StaffDepartment.eq(staff.getStaffDepartment()), queryBuilder.or(AttendanceDao.Properties.SignInTime.gt(today), AttendanceDao.Properties.SignOutTime.gt(today)));
                 List<Attendance> attendances = queryBuilder.list();
