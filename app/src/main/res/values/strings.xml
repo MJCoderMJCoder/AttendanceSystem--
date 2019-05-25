@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">纸纷飞</string>
+    <string name="app_name">考勤管理系统</string>
     <string name="title_activity_login">登录</string>
 
 </resources>
