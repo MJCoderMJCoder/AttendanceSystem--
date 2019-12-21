@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -372,7 +373,7 @@ public class NewEmployeeActivity extends AppCompatActivity {
      */
     private boolean faceEngineIsInit() {
         int faceEngineInit = ZffApplication.getFaceEngine().init(this, FaceEngine.ASF_DETECT_MODE_IMAGE, FaceEngine.ASF_OP_0_HIGHER_EXT, 10, 1, FaceEngine.ASF_NONE | FaceEngine.ASF_FACE_DETECT | FaceEngine.ASF_FACE_RECOGNITION | FaceEngine.ASF_AGE | FaceEngine.ASF_GENDER | FaceEngine.ASF_FACE3DANGLE | FaceEngine.ASF_LIVENESS);
-        //        Log.v("faceEngineInit", faceEngineInit + "");
+        Log.v("faceEngineInit", faceEngineInit + "");
         return faceEngineInit == ErrorInfo.MOK;
     }
 

@@ -6,6 +6,7 @@ import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -256,7 +257,8 @@ public class SignInActivity extends AppCompatActivity {
                             //                            camera.setDisplayOrientation(90);   //让相机旋转90度
                         }
                     }
-                    currentCameraID = backCameraId;
+//                    currentCameraID = backCameraId;
+                    currentCameraID = frontCameraId;
                     camera = Camera.open(currentCameraID);
                     camera.setDisplayOrientation(backCameraDegrees);   //让相机旋转90度
                 }
@@ -393,7 +395,7 @@ public class SignInActivity extends AppCompatActivity {
      */
     private boolean faceEngineIsInit() {
         int faceEngineInit = ZffApplication.getFaceEngine().init(this, FaceEngine.ASF_DETECT_MODE_VIDEO, FaceEngine.ASF_OP_0_HIGHER_EXT, 10, 1, FaceEngine.ASF_NONE | FaceEngine.ASF_FACE_DETECT | FaceEngine.ASF_FACE_RECOGNITION | FaceEngine.ASF_AGE | FaceEngine.ASF_GENDER | FaceEngine.ASF_FACE3DANGLE | FaceEngine.ASF_LIVENESS);
-        //        Log.v("faceEngineInit", faceEngineInit + "");
+        Log.v("faceEngineInit", faceEngineInit + "");
         return faceEngineInit == ErrorInfo.MOK;
     }
 

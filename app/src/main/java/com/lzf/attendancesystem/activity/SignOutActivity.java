@@ -256,7 +256,8 @@ public class SignOutActivity extends AppCompatActivity {
                             //                            camera.setDisplayOrientation(90);   //让相机旋转90度
                         }
                     }
-                    currentCameraID = backCameraId;
+//                    currentCameraID = backCameraId;
+                    currentCameraID = frontCameraId;
                     camera = Camera.open(currentCameraID);
                     camera.setDisplayOrientation(backCameraDegrees);   //让相机旋转90度
                 }

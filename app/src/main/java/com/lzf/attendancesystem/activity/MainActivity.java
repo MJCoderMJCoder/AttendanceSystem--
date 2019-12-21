@@ -63,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
+        //激活设备，一个设备安装后仅需激活一次，卸载重新安装后需要重新激活。
+        if (ErrorInfo.MOK != ZffApplication.getFaceEngine().active(this, "GMZPhEArrLoVVb8gtJ1KydUPRdgK4JkZVXh77WKvGFQD", "2EUD77P6jAr2TpAU372yd26ASB18pEZbeRFnPCsPFZTN")) {
+            ZffApplication.getFaceEngine().active(this, "GMZPhEArrLoVVb8gtJ1KydUPRdgK4JkZVXh77WKvGFQD", "2EUD77P6jAr2TpAU372yd26ASB18pEZbeRFnPCsPFZTN");
+        }
         switch (view.getId()) {
             case R.id.attendance:
                 startActivity(new Intent(this, AttendanceActivity.class));
