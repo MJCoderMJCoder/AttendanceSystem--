@@ -101,8 +101,7 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(new Intent(MainActivity.this, AttendanceActivity.class));
                             break;
                         case R.id.adminLogin:
-//                            startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));
-                            startActivity(new Intent(MainActivity.this, AdminMainActivity.class));
+                            startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));
                             break;
                         default:
                             break;

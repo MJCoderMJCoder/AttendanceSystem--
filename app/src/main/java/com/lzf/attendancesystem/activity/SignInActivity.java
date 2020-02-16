@@ -118,8 +118,8 @@ public class SignInActivity extends AppCompatActivity {
                             ageValue = ageInfo.getAge();
                             if (ageInfo.getAge() == AgeInfo.UNKNOWN_AGE) {
                                 age.setText("");
-                            } else if (ageValue < 45) {
-                                age.setText(ageInfo.getAge() + "岁");
+                            } else if (ageValue > -1 && ageValue < 45) {
+                                age.setText(ageValue + "岁");
                             } else {
                                 age.setText("");
                             }
@@ -396,7 +396,7 @@ public class SignInActivity extends AppCompatActivity {
      * @return FaceEngine是否初始化成功
      */
     private boolean faceEngineIsInit() {
-        int faceEngineInit = ZffApplication.getFaceEngine().init(this, DetectMode.ASF_DETECT_MODE_VIDEO, DetectFaceOrientPriority.ASF_OP_ALL_OUT, 10, 1,  FaceEngine.ASF_FACE_DETECT | FaceEngine.ASF_FACE_RECOGNITION | FaceEngine.ASF_AGE | FaceEngine.ASF_GENDER | FaceEngine.ASF_FACE3DANGLE | FaceEngine.ASF_LIVENESS);
+        int faceEngineInit = ZffApplication.getFaceEngine().init(this, DetectMode.ASF_DETECT_MODE_VIDEO, DetectFaceOrientPriority.ASF_OP_ALL_OUT, 16, 1, FaceEngine.ASF_FACE_DETECT | FaceEngine.ASF_FACE_RECOGNITION | FaceEngine.ASF_AGE | FaceEngine.ASF_GENDER | FaceEngine.ASF_FACE3DANGLE | FaceEngine.ASF_LIVENESS | FaceEngine.ASF_IR_LIVENESS);
         Log.v("faceEngineInit", faceEngineInit + "");
         return faceEngineInit == ErrorInfo.MOK;
     }
@@ -479,8 +479,20 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //调用FaceEngine的unInit方法销毁引擎。在init成功后如不unInit会导致内存泄漏。
-        ZffApplication.getFaceEngine().unInit();
+        try {
+            if (camera != null) {
+                //                camera.lock(); //从Android 4.0 (API 14)开始, Camera.lock() 和 Camera.unlock() 的调用已经被自动管理了。
+                camera.setPreviewCallback(null);
+                camera.setPreviewDisplay(null);
+                camera.stopPreview();
+                camera.release();
+                camera = null;
+            }
+            //调用FaceEngine的unInit方法销毁引擎。在init成功后如不unInit会导致内存泄漏。
+            ZffApplication.getFaceEngine().unInit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

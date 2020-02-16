@@ -10,34 +10,38 @@
               android:weightSum="9">
 
     <TextView
-        android:id="@+id/employeeID"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:text="员工工号"
-        android:textColor="@android:color/white"/>
+            android:id="@+id/employeeID"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:layout_weight="2"
+            android:text="员工工号"
+            android:textColor="@android:color/white"/>
 
     <TextView
-        android:id="@+id/name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:text="姓名"
-        android:textColor="@android:color/white"/>
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:layout_weight="3"
+            android:text="姓名"
+            android:textColor="@android:color/white"/>
 
     <TextView
-        android:id="@+id/gender"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="性别"
-        android:textColor="@android:color/white"/>
+            android:id="@+id/gender"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:layout_weight="1"
+            android:text="性别"
+            android:textColor="@android:color/white"/>
 
     <TextView
-        android:id="@+id/department"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:text="部门"
-        android:textColor="@android:color/white"/>
+            android:id="@+id/department"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textSize="13sp"
+            android:text="部门"
+            android:textColor="@android:color/white"/>
 </LinearLayout>

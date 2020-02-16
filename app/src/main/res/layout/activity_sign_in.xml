@@ -1,196 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.lzf.attendancesystem.activity.SignInActivity">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.lzf.attendancesystem.activity.SignInActivity">
 
     <RelativeLayout
-        android:id="@+id/topTxt"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark">
+            android:id="@+id/topTxt"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimaryDark">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="上班签到"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"/>
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="上班签到"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"/>
 
         <ImageView
-            android:id="@+id/autorenew"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:onClick="onClick"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:src="@drawable/ic_autorenew_black_24dp"/>
+                android:id="@+id/autorenew"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:onClick="onClick"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/ic_autorenew_black_24dp"/>
     </RelativeLayout>
 
     <TextClock
-        android:id="@+id/currentTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/topTxt"
-        android:background="@color/colorPrimaryDark"
-        android:format24Hour="yyyy年MM月dd日 HH:mm:ss"
-        android:gravity="center"
-        android:padding="5dp"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        tools:targetApi="jelly_bean_mr1"/>
+            android:id="@+id/currentTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/topTxt"
+            android:background="@color/colorPrimaryDark"
+            android:format24Hour="yyyy年MM月dd日 HH:mm:ss"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            tools:targetApi="jelly_bean_mr1"/>
 
     <SurfaceView
-        android:id="@+id/surfaceView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/currentTime"/>
+            android:id="@+id/surfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/currentTime"/>
 
     <TextView
-        android:id="@+id/age"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/currentTime"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="80dp"
-        android:text=""
-        android:textColor="@color/zffSuccess"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+            android:id="@+id/age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/currentTime"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="80dp"
+            android:text=""
+            android:textColor="@color/zffSuccess"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/gender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/age"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="10dp"
-        android:text=""
-        android:textColor="@color/zffSuccess"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+            android:id="@+id/gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/age"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:text=""
+            android:textColor="@color/zffSuccess"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/liveness"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="110dp"
-        android:text=""
-        android:textColor="@color/zffSuccess"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+            android:id="@+id/liveness"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="110dp"
+            android:text=""
+            android:textColor="@color/zffSuccess"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
 
     <ImageView
-        android:id="@+id/signInSuccess"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/currentTime"
-        android:alpha="0.8"
-        android:src="@drawable/success"
-        android:visibility="gone"/>
+            android:id="@+id/signInSuccess"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/currentTime"
+            android:alpha="0.8"
+            android:src="@drawable/success"
+            android:visibility="gone"/>
 
     <LinearLayout
-        android:id="@+id/signInSuccessLinear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_margin="30dp"
-        android:background="@drawable/rounded_rectangle"
-        android:backgroundTint="@android:color/white"
-        android:orientation="vertical"
-        android:visibility="gone">
+            android:id="@+id/signInSuccessLinear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="30dp"
+            android:background="@drawable/rounded_rectangle"
+            android:backgroundTint="@android:color/white"
+            android:orientation="vertical"
+            android:visibility="gone">
 
         <TextView
-            android:id="@+id/signInSuccessT"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="标题"/>
+                android:id="@+id/signInSuccessT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="标题"/>
         <!--工号……姓名……时间……签到类型-->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:weightSum="7">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:weightSum="7">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="工号"/>
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="工号"/>
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="姓名"/>
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="姓名"/>
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="签到类型"/>
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="签到类型"/>
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:gravity="center"
-                android:text="时间"/>
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="时间"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:weightSum="7">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:weightSum="7">
 
             <TextView
-                android:id="@+id/staffId"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="工号"/>
+                    android:id="@+id/staffId"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="工号"/>
 
             <TextView
-                android:id="@+id/staffName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="姓名"/>
+                    android:id="@+id/staffName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="姓名"/>
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="上班签到"/>
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="上班签到"/>
 
             <TextView
-                android:id="@+id/signInTime"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:gravity="center"
-                android:text="时间"/>
+                    android:id="@+id/signInTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="时间"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
