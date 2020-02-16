@@ -24,6 +24,8 @@ import com.arcsoft.face.FaceInfo;
 import com.arcsoft.face.FaceSimilar;
 import com.arcsoft.face.GenderInfo;
 import com.arcsoft.face.LivenessInfo;
+import com.arcsoft.face.enums.DetectFaceOrientPriority;
+import com.arcsoft.face.enums.DetectMode;
 import com.lzf.attendancesystem.R;
 import com.lzf.attendancesystem.ZffApplication;
 import com.lzf.attendancesystem.bean.Attendance;
@@ -396,7 +398,7 @@ public class SignOutActivity extends AppCompatActivity {
      * @return FaceEngine是否初始化成功
      */
     private boolean faceEngineIsInit() {
-        int faceEngineInit = ZffApplication.getFaceEngine().init(this, FaceEngine.ASF_DETECT_MODE_VIDEO, FaceEngine.ASF_OP_0_HIGHER_EXT, 10, 1, FaceEngine.ASF_NONE | FaceEngine.ASF_FACE_DETECT | FaceEngine.ASF_FACE_RECOGNITION | FaceEngine.ASF_AGE | FaceEngine.ASF_GENDER | FaceEngine.ASF_FACE3DANGLE | FaceEngine.ASF_LIVENESS);
+        int faceEngineInit = ZffApplication.getFaceEngine().init(this, DetectMode.ASF_DETECT_MODE_VIDEO, DetectFaceOrientPriority.ASF_OP_ALL_OUT, 10, 1, FaceEngine.ASF_FACE_DETECT | FaceEngine.ASF_FACE_RECOGNITION | FaceEngine.ASF_AGE | FaceEngine.ASF_GENDER | FaceEngine.ASF_FACE3DANGLE | FaceEngine.ASF_LIVENESS);
         //        Log.v("faceEngineInit", faceEngineInit + "");
         return faceEngineInit == ErrorInfo.MOK;
     }

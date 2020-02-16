@@ -8,15 +8,29 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.arcsoft.face.ActiveFileInfo;
 import com.arcsoft.face.ErrorInfo;
+import com.arcsoft.face.FaceEngine;
+import com.arcsoft.face.enums.RuntimeABI;
 import com.lzf.attendancesystem.R;
 import com.lzf.attendancesystem.ZffApplication;
+import com.lzf.attendancesystem.util.ConfigUtil;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.arcsoft.face.enums.DetectFaceOrientPriority.ASF_OP_ALL_OUT;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,35 +62,70 @@ public class MainActivity extends AppCompatActivity {
 
         //        Log.v(stringFromJNI(), stringFromJNI());
         permissionIsGranted();
-
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                int temp = ZffApplication.getFaceEngine().active(MainActivity.this, "GMZPhEArrLoVVb8gtJ1KydUPRdgK4JkZVXh77WKvGFQD", "2EUD77P6jAr2TpAU372yd26ASB18pEZbeRFnPCsPFZTN");
-                //激活设备，一个设备安装后仅需激活一次，卸载重新安装后需要重新激活。
-                while (ErrorInfo.MOK != temp) {
-                    temp = ZffApplication.getFaceEngine().active(MainActivity.this, "GMZPhEArrLoVVb8gtJ1KydUPRdgK4JkZVXh77WKvGFQD", "2EUD77P6jAr2TpAU372yd26ASB18pEZbeRFnPCsPFZTN");
-                }
-            }
-        }.start();
     }
 
-    public void onClick(View view) {
-        //激活设备，一个设备安装后仅需激活一次，卸载重新安装后需要重新激活。
-        if (ErrorInfo.MOK != ZffApplication.getFaceEngine().active(this, "GMZPhEArrLoVVb8gtJ1KydUPRdgK4JkZVXh77WKvGFQD", "2EUD77P6jAr2TpAU372yd26ASB18pEZbeRFnPCsPFZTN")) {
-            ZffApplication.getFaceEngine().active(this, "GMZPhEArrLoVVb8gtJ1KydUPRdgK4JkZVXh77WKvGFQD", "2EUD77P6jAr2TpAU372yd26ASB18pEZbeRFnPCsPFZTN");
-        }
-        switch (view.getId()) {
-            case R.id.attendance:
-                startActivity(new Intent(this, AttendanceActivity.class));
-                break;
-            case R.id.adminLogin:
-                startActivity(new Intent(this, AdminLoginActivity.class));
-                break;
-            default:
-                break;
-        }
+    public void onClick(final View view) {
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) {
+                RuntimeABI runtimeABI = FaceEngine.getRuntimeABI();
+                Log.i("MJCoder", "subscribe: getRuntimeABI() " + runtimeABI);
+                int activeCode = FaceEngine.activeOnline(MainActivity.this, "GMZPhEArrLoVVb8gtJ1KydUPRdgK4JkZVXh77WKvGFQD", "2EUD77P6jAr2TpAU372yd26ASB18pEZbeRFnPCsPFZTN");
+                emitter.onNext(activeCode);
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Integer>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+            }
+
+            @Override
+            public void onNext(Integer activeCode) {
+                if (activeCode == ErrorInfo.MOK) {
+                    //Toast.makeText(MainActivity.this, "激活引擎成功", Toast.LENGTH_SHORT).show();
+                    ConfigUtil.setFtOrient(MainActivity.this, ASF_OP_ALL_OUT);
+                    switch (view.getId()) {
+                        case R.id.attendance:
+                            startActivity(new Intent(MainActivity.this, AttendanceActivity.class));
+                            break;
+                        case R.id.adminLogin:
+                            startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));
+                            break;
+                        default:
+                            break;
+                    }
+                } else if (activeCode == ErrorInfo.MERR_ASF_ALREADY_ACTIVATED) {
+                    //Toast.makeText(MainActivity.this, "引擎已激活，无需再次激活", Toast.LENGTH_SHORT).show();
+                    ConfigUtil.setFtOrient(MainActivity.this, ASF_OP_ALL_OUT);
+                    switch (view.getId()) {
+                        case R.id.attendance:
+                            startActivity(new Intent(MainActivity.this, AttendanceActivity.class));
+                            break;
+                        case R.id.adminLogin:
+//                            startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));
+                            startActivity(new Intent(MainActivity.this, AdminMainActivity.class));
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "引擎激活失败，错误码为：" + activeCode, Toast.LENGTH_LONG).show();
+                }
+                ActiveFileInfo activeFileInfo = new ActiveFileInfo();
+                int res = FaceEngine.getActiveFileInfo(MainActivity.this, activeFileInfo);
+                if (res == ErrorInfo.MOK) {
+                    Log.i("MJCoder", activeFileInfo.toString());
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
     }
 
     /**

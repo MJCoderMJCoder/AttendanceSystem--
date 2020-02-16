@@ -72,9 +72,10 @@
             android:launchMode="singleTop">
         </activity>
         <activity
-            android:name=".activity.NativeViewActivity"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustResize|stateHidden">
+                android:name=".activity.NativeViewActivity"
+                android:theme="@style/DatePickerTheme"
+                android:launchMode="singleTop"
+                android:windowSoftInputMode="adjustResize|stateHidden">
         </activity>
         <activity
             android:name=".activity.ModifyEmployeeActivity"

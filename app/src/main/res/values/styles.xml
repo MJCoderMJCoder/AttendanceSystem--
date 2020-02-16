@@ -8,5 +8,15 @@
         <item name="colorAccent">@color/colorPrimaryDark</item>
         <item name="android:windowBackground">@mipmap/background</item>
     </style>
+    <!--DatePicker的样式-开始-->
+    <style name="DatePickerTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:editTextStyle">@style/Widget.EditText.White</item>
+        <item name="android:windowBackground">@color/zffLucency</item>
+    </style>
 
+    <style name="Widget.EditText.White" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+    <!--DatePicker的样式-结束-->
 </resources>

@@ -242,17 +242,18 @@
                 android:textSize="16sp"/>
 
             <EditText
-                android:id="@+id/emailEdit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:background="@drawable/rounded_rectangle_border"
-                android:gravity="center"
-                android:hint="请输入邮箱"
-                android:padding="10dp"
-                android:textColor="@android:color/white"
-                android:textColorHint="@android:color/darker_gray"
-                android:textSize="16sp"/>
+                    android:id="@+id/emailEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:layout_weight="3"
+                    android:background="@drawable/rounded_rectangle_border"
+                    android:gravity="center"
+                    android:hint="请输入邮箱"
+                    android:padding="10dp"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/darker_gray"
+                    android:textSize="16sp"/>
         </LinearLayout>
 
         <LinearLayout
