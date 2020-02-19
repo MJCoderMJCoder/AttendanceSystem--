@@ -1,135 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="2"
-    tools:context="com.lzf.attendancesystem.activity.AttendanceActivity">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="2"
+        tools:context="com.lzf.attendancesystem.activity.AttendanceActivity">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center">
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
 
         <Button
-            android:id="@+id/signIn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="20dp"
-            android:background="@drawable/rounded_rectangle"
-            android:onClick="onClick"
-            android:text="上班签到"
-            android:textColor="@android:color/white"/>
+                android:id="@+id/signIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="20dp"
+                android:background="@drawable/rounded_rectangle"
+                android:onClick="onClick"
+                android:text="上班签到"
+                android:textColor="@android:color/white"/>
 
         <LinearLayout
-            android:id="@+id/signInListTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:weightSum="8">
+                android:id="@+id/signInListTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:weightSum="5">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="工号"
-                android:textColor="@android:color/white"/>
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="工号"
+                    android:textColor="@android:color/white"/>
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="姓名"
-                android:textColor="@android:color/white"/>
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="姓名"
+                    android:textColor="@android:color/white"/>
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="部门"
-                android:textColor="@android:color/white"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:text="签到时间"
-                android:textColor="@android:color/white"/>
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="部门"
+                    android:textColor="@android:color/white"/>
         </LinearLayout>
 
         <ListView
-            android:id="@+id/signInList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/signIn"
-            android:layout_below="@id/signInListTitle"/>
+                android:id="@+id/signInList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/signIn"
+                android:layout_below="@id/signInListTitle"/>
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
         <Button
-            android:id="@+id/signOut"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="20dp"
-            android:background="@drawable/rounded_rectangle"
-            android:onClick="onClick"
-            android:text="下班签退"
-            android:textColor="@android:color/white"/>
+                android:id="@+id/signOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="20dp"
+                android:background="@drawable/rounded_rectangle"
+                android:onClick="onClick"
+                android:text="下班签退"
+                android:textColor="@android:color/white"/>
 
         <LinearLayout
-            android:id="@+id/signOutListTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:weightSum="8">
+                android:id="@+id/signOutListTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:weightSum="5">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="工号"
-                android:textColor="@android:color/white"/>
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="工号"
+                    android:textColor="@android:color/white"/>
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="姓名"
-                android:textColor="@android:color/white"/>
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="姓名"
+                    android:textColor="@android:color/white"/>
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="部门"
-                android:textColor="@android:color/white"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:text="签退时间"
-                android:textColor="@android:color/white"/>
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="部门"
+                    android:textColor="@android:color/white"/>
         </LinearLayout>
 
         <ListView
-            android:id="@+id/signOutList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/signOut"
-            android:layout_below="@id/signOutListTitle"/>
+                android:id="@+id/signOutList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/signOut"
+                android:layout_below="@id/signOutListTitle"/>
     </RelativeLayout>
 </LinearLayout>

@@ -38,6 +38,9 @@ public class AdminMainActivity extends AppCompatActivity {
                 intent.setAction("android.settings.DATE_SETTINGS");
                 startActivity(intent);
                 break;
+            case R.id.setAttendanceAddressRange:
+                startActivity(new Intent(this, SetAddressRangeActivity.class));
+                break;
             case R.id.staffManage:
                 startActivity(new Intent(this, StaffManageActivity.class));
                 break;

@@ -8,7 +8,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
-        versionName "1.2.0"
+        versionName "1.3.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        externalNativeBuild {
 //            cmake {
@@ -48,13 +48,19 @@ android {
 //            universalApk false
 //        }
 //    }
+    lintOptions {
+        //  true--所有正式版构建执行规则生成崩溃的lint检查，如果有崩溃问题将停止构建
+        checkReleaseBuilds false
+        // true--错误发生后停止gradle构建
+        abortOnError false
+    }
 }
 
 greendao {
     /**
      * schemaVersion：数据库模式的当前版本。通过 * OpenHelpers 类 进行架构版本之间迁移。如果更改实体/数据库架构，则必须增加此值。默认为1。
      */
-    schemaVersion 1
+    schemaVersion 2
     /**
      * daoPackage：生成的DAO，DaoMaster和DaoSession的包名。 默认为源实体的包名称。
      */
@@ -88,3 +94,5 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
 }
+
+

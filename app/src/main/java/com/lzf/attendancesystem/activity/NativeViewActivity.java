@@ -11,9 +11,13 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.amap.api.maps.AMapUtils;
+import com.amap.api.maps.model.LatLng;
 import com.lzf.attendancesystem.R;
 import com.lzf.attendancesystem.ZffApplication;
 import com.lzf.attendancesystem.bean.Attendance;
+import com.lzf.attendancesystem.bean.AttendanceAddress;
+import com.lzf.attendancesystem.bean.AttendanceAddressDao;
 import com.lzf.attendancesystem.bean.AttendanceDao;
 import com.lzf.attendancesystem.util.ReusableAdapter;
 
@@ -21,11 +25,13 @@ import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class NativeViewActivity extends AppCompatActivity {
     private AttendanceDao attendanceDao = ZffApplication.getDaoSession(this).getAttendanceDao();
     private ReusableAdapter<Attendance> reusableAdapter;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+    private List<AttendanceAddress> attendanceAddresses = ZffApplication.getDaoSession(this).getAttendanceAddressDao().queryBuilder().orderAsc(AttendanceAddressDao.Properties.AttendanceAddressId).list();
 
     private CheckBox staffIDCheck;
     private CheckBox startTimeCheck;
@@ -43,15 +49,34 @@ public class NativeViewActivity extends AppCompatActivity {
         reusableAdapter = new ReusableAdapter<Attendance>(attendanceDao.queryBuilder().orderDesc(AttendanceDao.Properties.SignInTime).list(), R.layout.item_native_view) {
             @Override
             public void bindView(ViewHolder holder, Attendance obj) {
-                holder.setText(R.id.staffID, obj.getStaffId() + "");
+                holder.setText(R.id.staffId, obj.getStaffId() + "");
                 holder.setText(R.id.staffName, obj.getStaffName());
+                holder.setText(R.id.staffDepartment, obj.getStaffDepartment());
                 if (obj.getSignInTime() > 1000) {
-                    holder.setText(R.id.signInTime, simpleDateFormat.format(obj.getSignInTime()));
+                    if (attendanceAddresses != null && attendanceAddresses.size() > 0) {
+                        LatLng attendanceAddress = new LatLng(attendanceAddresses.get(0).getLatitude(), attendanceAddresses.get(0).getLongitude());
+                        if (AMapUtils.calculateLineDistance(attendanceAddress, new LatLng(obj.getSignInLatitude(), obj.getSignInLongitude())) < 1500) {
+                            holder.setText(R.id.signInTime, simpleDateFormat.format(obj.getSignInTime()) + "（正常签到）");
+                        } else {
+                            holder.setText(R.id.signInTime, simpleDateFormat.format(obj.getSignInTime()) + "（外出签到）");
+                        }
+                    } else {
+                        holder.setText(R.id.sign, simpleDateFormat.format(obj.getSignInTime()));
+                    }
                 } else {
                     holder.setText(R.id.signInTime, "");
                 }
                 if (obj.getSignOutTime() > 1000) {
-                    holder.setText(R.id.signOutTime, simpleDateFormat.format(obj.getSignOutTime()));
+                    if (attendanceAddresses != null && attendanceAddresses.size() > 0) {
+                        LatLng attendanceAddress = new LatLng(attendanceAddresses.get(0).getLatitude(), attendanceAddresses.get(0).getLongitude());
+                        if (AMapUtils.calculateLineDistance(attendanceAddress, new LatLng(obj.getSignInLatitude(), obj.getSignInLongitude())) < 1500) {
+                            holder.setText(R.id.signOutTime, simpleDateFormat.format(obj.getSignInTime()) + "（正常签退）");
+                        } else {
+                            holder.setText(R.id.signOutTime, simpleDateFormat.format(obj.getSignInTime()) + "（外出签退）");
+                        }
+                    } else {
+                        holder.setText(R.id.signOutTime, simpleDateFormat.format(obj.getSignInTime()));
+                    }
                 } else {
                     holder.setText(R.id.signOutTime, "");
                 }

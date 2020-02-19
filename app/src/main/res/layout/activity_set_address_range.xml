@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.lzf.attendancesystem.activity.SetAddressRangeActivity">
+
+    <TextView
+            android:id="@+id/topTxt"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="设置考勤地址"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+
+
+    <com.amap.api.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_below="@id/topTxt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    </com.amap.api.maps.MapView>
+    <Button
+            android:text="提         交"
+            android:layout_width="match_parent"
+            android:textSize="20sp"
+            android:onClick="onClick"
+            android:layout_alignParentBottom="true"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimaryDark"
+            android:layout_height="wrap_content" android:id="@+id/submitBtn"/>
+</RelativeLayout>

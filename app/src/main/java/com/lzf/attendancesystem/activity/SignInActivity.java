@@ -1,5 +1,6 @@
 package com.lzf.attendancesystem.activity;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.hardware.Camera;
@@ -63,6 +64,8 @@ public class SignInActivity extends AppCompatActivity {
     private TextView signInSuccessT;
     private List<Staff> staffList = ZffApplication.getDaoSession(this).getStaffDao().queryBuilder().orderAsc(StaffDao.Properties.StaffId).list();
 
+    private double latitude;
+    private double longitude;
     private AttendanceDao attendanceDao = ZffApplication.getDaoSession(this).getAttendanceDao();
     private long today = System.currentTimeMillis() / (1000 * 3600 * 24) * (1000 * 3600 * 24) - TimeZone.getDefault().getRawOffset();//今天零点零分零秒的毫秒数
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
@@ -319,6 +322,9 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        Intent intent = getIntent();
+        latitude = intent.getDoubleExtra("latitude", 0);
+        longitude = intent.getDoubleExtra("longitude", 0);
         if (checkCamera() && faceEngineIsInit()) {
             age = findViewById(R.id.age);
             gender = findViewById(R.id.gender);
@@ -414,6 +420,8 @@ public class SignInActivity extends AppCompatActivity {
                         signInSuccessUI(attendance, "你已经签到过了");
                     } else {
                         attendance.setSignInTime(System.currentTimeMillis());
+                        attendance.setSignInLatitude(latitude);
+                        attendance.setSignInLongitude(longitude);
                         attendanceDao.update(attendance);
                         signInSuccessUI(attendance, "恭喜你，上班签到成功。");
                     }
@@ -432,7 +440,8 @@ public class SignInActivity extends AppCompatActivity {
                             cursor.close();
                         }
                     }
-                    Attendance attendance = new Attendance(attendanceId, staff.getStaffId(), staff.getStaffName(), staff.getStaffDepartment(), System.currentTimeMillis(), 0L);
+                    Attendance attendance = new Attendance(attendanceId, staff.getStaffId(), staff.getStaffName(), staff.getStaffDepartment(), System.currentTimeMillis(), latitude, longitude,
+                            0L, 0, 0);
                     attendanceDao.insert(attendance);
                     signInSuccessUI(attendance, "恭喜你，上班签到成功。");
                 }

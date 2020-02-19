@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorPrimaryDark</item>
         <item name="android:windowBackground">@mipmap/background</item>
     </style>
-    <!--DatePickerµÄÑùÊ½-¿ªÊ¼-->
+    <!--DatePickerçš„æ ·å¼-å¼€å§‹-->
     <style name="DatePickerTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:editTextStyle">@style/Widget.EditText.White</item>
         <item name="android:windowBackground">@color/zffLucency</item>
@@ -18,5 +18,5 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">13sp</item>
     </style>
-    <!--DatePickerµÄÑùÊ½-½áÊø-->
+    <!--DatePickerçš„æ ·å¼-ç»“æŸ-->
 </resources>

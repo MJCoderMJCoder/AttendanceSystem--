@@ -1,5 +1,6 @@
 package com.lzf.attendancesystem.activity;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.hardware.Camera;
@@ -62,6 +63,8 @@ public class SignOutActivity extends AppCompatActivity {
     private TextView signOutSuccessT;
     private List<Staff> staffList = ZffApplication.getDaoSession(this).getStaffDao().queryBuilder().orderAsc(StaffDao.Properties.StaffId).list();
 
+    private double latitude;
+    private double longitude;
     private AttendanceDao attendanceDao = ZffApplication.getDaoSession(this).getAttendanceDao();
     private long today = System.currentTimeMillis() / (1000 * 3600 * 24) * (1000 * 3600 * 24) - TimeZone.getDefault().getRawOffset();//今天零点零分零秒的毫秒数
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
@@ -319,6 +322,9 @@ public class SignOutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_out);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        Intent intent = getIntent();
+        latitude = intent.getDoubleExtra("latitude", 0);
+        longitude = intent.getDoubleExtra("longitude", 0);
         if (checkCamera() && faceEngineIsInit()) {
             age = findViewById(R.id.age);
             gender = findViewById(R.id.gender);
@@ -415,6 +421,8 @@ public class SignOutActivity extends AppCompatActivity {
                         signOutSuccessUI(attendance, "你已经签退过了");
                     } else {
                         attendance.setSignOutTime(System.currentTimeMillis());
+                        attendance.setSignOutLatitude(latitude);
+                        attendance.setSignOutLongitude(longitude);
                         attendanceDao.update(attendance);
                         signOutSuccessUI(attendance, "恭喜你，下班签退成功。");
                     }
@@ -433,7 +441,7 @@ public class SignOutActivity extends AppCompatActivity {
                             cursor.close();
                         }
                     }
-                    Attendance attendance = new Attendance(attendanceId, staff.getStaffId(), staff.getStaffName(), staff.getStaffDepartment(), 0L, System.currentTimeMillis());
+                    Attendance attendance = new Attendance(attendanceId, staff.getStaffId(), staff.getStaffName(), staff.getStaffDepartment(), 0L, 0, 0, System.currentTimeMillis(), latitude, longitude);
                     attendanceDao.insert(attendance);
                     signOutSuccessUI(attendance, "恭喜你，下班签退成功。");
                 }

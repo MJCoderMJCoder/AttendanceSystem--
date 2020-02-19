@@ -96,21 +96,50 @@ public class Attendance implements Serializable {
      * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
      */
     @NotNull
+    private double signInLatitude;
+    /**
+     * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
+     * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
+     */
+    @NotNull
+    private double signInLongitude;
+    /**
+     * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
+     * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
+     */
+    @NotNull
     private long signOutTime;
+    /**
+     * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
+     * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
+     */
+    @NotNull
+    private double signOutLatitude;
+    /**
+     * 这个@NotNull注释使该属性成为数据库端的“NOT NULL”列。
+     * 通常使用@NotNull标记基本类型（long，int，short，byte）是有意义的，同时使用包装类（Long，Integer，Short，Byte）具有可空值。
+     */
+    @NotNull
+    private double signOutLongitude;
     /**
      * 这个@Transient注释标记要从持久性中排除的属性。 将它们用于临时状态等。或者，您也可以使用Java中的transient关键字。
      */
     @Transient
     private static final long serialVersionUID = -1134974556013000026L; // not persisted
 
-    @Generated(hash = 1893668669)
-    public Attendance(long attendanceId, long staffId, @NotNull String staffName, @NotNull String staffDepartment, long signInTime, long signOutTime) {
+    @Generated(hash = 2099981814)
+    public Attendance(long attendanceId, long staffId, @NotNull String staffName, @NotNull String staffDepartment, long signInTime, double signInLatitude,
+                      double signInLongitude, long signOutTime, double signOutLatitude, double signOutLongitude) {
         this.attendanceId = attendanceId;
         this.staffId = staffId;
         this.staffName = staffName;
         this.staffDepartment = staffDepartment;
         this.signInTime = signInTime;
+        this.signInLatitude = signInLatitude;
+        this.signInLongitude = signInLongitude;
         this.signOutTime = signOutTime;
+        this.signOutLatitude = signOutLatitude;
+        this.signOutLongitude = signOutLongitude;
     }
 
     @Generated(hash = 812698609)
@@ -157,6 +186,22 @@ public class Attendance implements Serializable {
         this.signInTime = signInTime;
     }
 
+    public double getSignInLatitude() {
+        return this.signInLatitude;
+    }
+
+    public void setSignInLatitude(double signInLatitude) {
+        this.signInLatitude = signInLatitude;
+    }
+
+    public double getSignInLongitude() {
+        return this.signInLongitude;
+    }
+
+    public void setSignInLongitude(double signInLongitude) {
+        this.signInLongitude = signInLongitude;
+    }
+
     public long getSignOutTime() {
         return this.signOutTime;
     }
@@ -164,4 +209,21 @@ public class Attendance implements Serializable {
     public void setSignOutTime(long signOutTime) {
         this.signOutTime = signOutTime;
     }
+
+    public double getSignOutLatitude() {
+        return this.signOutLatitude;
+    }
+
+    public void setSignOutLatitude(double signOutLatitude) {
+        this.signOutLatitude = signOutLatitude;
+    }
+
+    public double getSignOutLongitude() {
+        return this.signOutLongitude;
+    }
+
+    public void setSignOutLongitude(double signOutLongitude) {
+        this.signOutLongitude = signOutLongitude;
+    }
+
 }
