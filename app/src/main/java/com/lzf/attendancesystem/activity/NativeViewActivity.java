@@ -61,7 +61,7 @@ public class NativeViewActivity extends AppCompatActivity {
                             holder.setText(R.id.signInTime, simpleDateFormat.format(obj.getSignInTime()) + "（外出签到）");
                         }
                     } else {
-                        holder.setText(R.id.sign, simpleDateFormat.format(obj.getSignInTime()));
+                        holder.setText(R.id.signInTime, simpleDateFormat.format(obj.getSignInTime()));
                     }
                 } else {
                     holder.setText(R.id.signInTime, "");

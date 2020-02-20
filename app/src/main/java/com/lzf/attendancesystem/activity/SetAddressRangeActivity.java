@@ -111,6 +111,7 @@ public class SetAddressRangeActivity extends AppCompatActivity {
         if (attendanceAddresses != null && attendanceAddresses.size() > 0) {
             attendanceAddress = attendanceAddresses.get(0);
             LatLng latLng = new LatLng(attendanceAddress.getLatitude(), attendanceAddress.getLongitude());
+            Log.v("latLng", latLng + "");
             //参数依次是：视角调整区域的中心点坐标、希望调整到的缩放级别、俯仰角0°~45°（垂直与地图时为0）、偏航角 0~360° (正北方为0)
             CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(new CameraPosition(latLng, 18, 30, 0));
             aMap.animateCamera(cameraUpdate);
@@ -143,6 +144,9 @@ public class SetAddressRangeActivity extends AppCompatActivity {
                 @Override
                 public void onMyLocationChange(Location location) {
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    Log.v("latLng", latLng + "");
+                    attendanceAddress.setLatitude(latLng.latitude);
+                    attendanceAddress.setLongitude(latLng.longitude);
                     //参数依次是：视角调整区域的中心点坐标、希望调整到的缩放级别、俯仰角0°~45°（垂直与地图时为0）、偏航角 0~360° (正北方为0)
                     CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(new CameraPosition(latLng, 18, 30, 0));
                     aMap.animateCamera(cameraUpdate);

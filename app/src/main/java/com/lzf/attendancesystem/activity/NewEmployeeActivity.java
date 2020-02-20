@@ -25,6 +25,7 @@ import com.arcsoft.face.enums.DetectFaceOrientPriority;
 import com.arcsoft.face.enums.DetectMode;
 import com.arcsoft.imageutil.ArcSoftImageFormat;
 import com.arcsoft.imageutil.ArcSoftImageUtil;
+import com.arcsoft.imageutil.ArcSoftImageUtilError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lzf.attendancesystem.R;
@@ -257,22 +258,10 @@ public class NewEmployeeActivity extends AppCompatActivity {
                         File tempFile = null;
                         Uri selectedImage = data.getData(); // 获取系统返回的照片的Uri
                         tempFile = new File(selectedImage.getPath()); // 获取照片路径
-                        if (tempFile == null) {
-                            String[] filePathColumn = new String[]{MediaStore.Images.Media.DATA};
-                            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);// 从系统表中查询指定Uri对应的照片
-                            if (cursor == null) {
-                                selectedImage = getXiaoMiUri(data);//解决方案( 解决小米手机上获取图片路径为null的情况)
-                                filePathColumn = new String[]{MediaStore.Images.Media.DATA};
-                                cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);// 从系统表中查询指定Uri对应的照片
-                            }
-                            cursor.moveToFirst();
-                            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                            tempFile = new File(cursor.getString(columnIndex)); // 获取照片路径
-                            cursor.close();
-                        }
                         FileInputStream fis = null;
                         FileOutputStream fos = null;
                         try {
+                            Log.v("选照返回", tempFile + "");
                             //文件复制到sd卡中
                             fis = new FileInputStream(tempFile);
                             fos = new FileOutputStream(getCurrentFile(null));
@@ -282,8 +271,31 @@ public class NewEmployeeActivity extends AppCompatActivity {
                                 fos.write(buffer, 0, len);
                             }
                             fos.flush();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        } catch (Exception exception) {
+                            try {
+                                String[] filePathColumn = new String[]{MediaStore.Images.Media.DATA};
+                                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);// 从系统表中查询指定Uri对应的照片
+                                if (cursor == null) {
+                                    selectedImage = getXiaoMiUri(data);//解决方案( 解决小米手机上获取图片路径为null的情况)
+                                    filePathColumn = new String[]{MediaStore.Images.Media.DATA};
+                                    cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);// 从系统表中查询指定Uri对应的照片
+                                }
+                                cursor.moveToFirst();
+                                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                                tempFile = new File(cursor.getString(columnIndex)); // 获取照片路径
+                                cursor.close();
+                                //文件复制到sd卡中
+                                fis = new FileInputStream(tempFile);
+                                fos = new FileOutputStream(getCurrentFile(null));
+                                int len = 0;
+                                byte[] buffer = new byte[2048];
+                                while (-1 != (len = fis.read(buffer))) {
+                                    fos.write(buffer, 0, len);
+                                }
+                                fos.flush();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         } finally {
                             //关闭数据流
                             try {
@@ -308,11 +320,22 @@ public class NewEmployeeActivity extends AppCompatActivity {
                  * faceInfoList - 人脸列表，传入后赋值
                  */
                 List<FaceInfo> faceInfos = new ArrayList<FaceInfo>();
-                // Bitmap bitmap = BitmapFactory.decodeFile(getCurrentFile(null).getAbsolutePath());
-                Bitmap bitmap = BitmapUtil.loadBitmap(getCurrentFile(null).getAbsolutePath());
-                Log.v("bitmap", bitmap + "");
-                if (ZffApplication.getFaceEngine().detectFaces(ArcFaceUtil.bitmapToNv21(bitmap, bitmap.getWidth(), bitmap.getHeight()), bitmap.getWidth(), bitmap.getHeight(), FaceEngine.CP_PAF_NV21, faceInfos) == ErrorInfo.MOK && faceInfos.size() > 0) {
-                    Log.v("faceInfos", faceInfos + "");
+                // Bitmap originalBitmap = BitmapFactory.decodeFile(getCurrentFile(null).getAbsolutePath());// 原始图像
+                Bitmap originalBitmap = BitmapUtil.loadBitmap(getCurrentFile(null).getAbsolutePath());// 原始图像
+                // 获取宽高符合要求的图像
+                Bitmap bitmap = ArcSoftImageUtil.getAlignedBitmap(originalBitmap, true);
+                // 为图像数据分配内存
+                byte[] nv21 = ArcSoftImageUtil.createImageData(bitmap.getWidth(), bitmap.getHeight(), ArcSoftImageFormat.NV21);
+                // 图像格式转换
+                int transformCode = ArcSoftImageUtil.bitmapToImageData(bitmap, nv21, ArcSoftImageFormat.NV21);
+                if (transformCode != ArcSoftImageUtilError.CODE_SUCCESS) {
+                    Toast.makeText(NewEmployeeActivity.this, "图像格式转换失败, code is : " + transformCode, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                int detectFacesCode = ZffApplication.getFaceEngine().detectFaces(nv21, bitmap.getWidth(), bitmap.getHeight(), FaceEngine.CP_PAF_NV21, faceInfos);
+                Log.v("detectFacesCode", detectFacesCode + "");
+                Log.v("faceInfos", faceInfos + "");
+                if (detectFacesCode == ErrorInfo.MOK && faceInfos.size() > 0) {
                     FaceFeature currentFaceFeature = new FaceFeature();
                     int faceEngineExtract = -1;
                     for (FaceInfo faceInfo : faceInfos) {

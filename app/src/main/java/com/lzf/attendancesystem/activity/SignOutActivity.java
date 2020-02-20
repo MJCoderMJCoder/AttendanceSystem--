@@ -120,7 +120,7 @@ public class SignOutActivity extends AppCompatActivity {
                             ageValue = ageInfo.getAge();
                             if (ageInfo.getAge() == AgeInfo.UNKNOWN_AGE) {
                                 age.setText("");
-                            } else if (ageValue < 45) {
+                            } else if (ageValue > -1 && ageValue < 45) {
                                 age.setText(ageInfo.getAge() + "岁");
                             } else {
                                 age.setText("");
