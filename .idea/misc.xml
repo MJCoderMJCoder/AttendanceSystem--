@@ -4,7 +4,7 @@
   <component name="Osmorc">
     <option name="bundlesOutputPath" value="D:\MJCod\AppData\Local\Temp" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" default="true" project-jdk-name="11 (OpenJdkX64Idea)" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="11 (OpenJdkX64Idea)" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
